@@ -7,6 +7,7 @@
         .alert {
             padding: 20px;
             color: white;
+            margin: 10px 0;
         }
 
         .alert-danger {

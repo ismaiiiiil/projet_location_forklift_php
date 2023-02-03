@@ -32,12 +32,13 @@ include 'layout/header.php';
     <!-- 
     - #HEADER
 -->
-
+    
     <?php
     include 'layout/navbar.php';
     ?>
     <main>
         <article class="login_register">
+        <?php include('layout/alert.php'); ?>
 
             <div class="wrapper">
                 <div class="title-text">

@@ -56,7 +56,7 @@ class UserController
                 $stmt = $db::connection()->prepare($sql);
                 $stmt->execute([$email,$nom, $prenom , $tel, $nom_entreprise, $email_entreprise ,$password ]);
                 if($stmt) {
-                    BaseController::redirect('signup');
+                    BaseController::redirect('login');
                     BaseController::set('success' , 'Are you registered successfully');
                 }
             }
@@ -74,12 +74,44 @@ class UserController
                 $stmt = $db::connection()->prepare($sql);
                 $stmt->execute([$email,$nom, $prenom , $tel,$password ]);
                 if($stmt) {
-                    BaseController::redirect('signup');
+                    BaseController::redirect('login');
                     BaseController::set('success' , 'Are you registered successfully');
                 }
             }
         }
     }
+
+
+    function login() {
+        $db = new DB();
+        $nom = $this->test_input($this->postData['nom']);
+        $email = $this->test_input($this->postData['email']);
+        $password = $this->test_input($this->postData['password']);
+
+        if(!empty($nom) || !empty($email) && !empty($password)) {
+            $sql = "SELECT * FROM users WHERE ;";
+            $stmt = $db::connection()->prepare($sql);
+            $stmt->execute([$email,$nom]);
+            if($stmt) {
+                BaseController::redirect('login');
+                BaseController::set('success' , 'Are you registered successfully');
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     // Check if email exists
