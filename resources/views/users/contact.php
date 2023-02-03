@@ -50,9 +50,9 @@ include 'layout/header.php';
                             <div class="input-box">
                                 <textarea placeholder="Enter your email" rows="5" cols="5"></textarea>
                             </div>
-                            <div class="input-box message-box">
+                            <!-- <div class="input-box message-box">
 
-                            </div>
+                            </div> -->
                             <div class="button">
                                 <input type="button" value="Send Now">
                             </div>
@@ -76,6 +76,7 @@ include 'layout/header.php';
     <?php
     include 'layout/footer.php';
     ?>
+    
 </body>
 
 </html>

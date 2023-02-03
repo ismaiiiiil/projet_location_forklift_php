@@ -13,11 +13,11 @@
                     </li>
 
                     <li>
-                        <a href="#featured-car" class="navbar-link" data-nav-link>Explore cars</a>
+                        <a href="#featured-car" class="navbar-link" data-nav-link>Category</a>
                     </li>
 
                     <li>
-                        <a href="#" class="navbar-link" data-nav-link>About us</a>
+                        <a href="#" class="navbar-link" data-nav-link>Service</a>
                     </li>
 
                     <li>
@@ -38,7 +38,7 @@
                     <span id="aria-label-txt">Home</span>
                 </a>
 
-                <a href="login_signup.php" class="btn user-btn" aria-label="Profile">
+                <a href="login.php" class="btn user-btn" aria-label="Profile">
                     <ion-icon name="person-outline"></ion-icon>
                     <!-- <ion-icon name="log-in-outline"></ion-icon> -->
                 </a>

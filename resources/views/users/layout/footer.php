@@ -7,7 +7,8 @@
          <div class="footer-top">
              <div class="footer-brand">
                  <a href="#" class="logo">
-                     <img src="../../../public/images/logo.svg" alt="Ridex logo" />
+                     <img src="../../../public/images/logoSite.png"
+                     width="70px" alt="Engiloc logo" />
                  </a>
 
                  <p class="footer-text">
@@ -159,33 +160,7 @@
 
 
 
-<script>
-    const loginText = document.querySelector(".title-text .login");
-    const wrapper = document.querySelector(".wrapper");
-    const loginForm = document.querySelector("form.login");
-    const loginBtn = document.querySelector("label.login");
-    const signupBtn = document.querySelector("label.signup");
-    const signupLink = document.querySelector("form .signup-link a");
-    wrapper.style.height = "516px";
-
-    signupBtn.onclick = (() => {
-        loginForm.style.marginLeft = "-50%";
-        loginText.style.marginLeft = "-50%";
-        wrapper.style.height = "max-content";
-    });
-    loginBtn.onclick = (() => {
-        loginForm.style.marginLeft = "0%";
-        loginText.style.marginLeft = "0%";
-        wrapper.style.height = "516px";
-    });
-    signupLink.onclick = (() => {
-        signupBtn.click();
-        return false;
-    });
-
-    
-
-
+ <script>
 
     function getAllMachine(id) {
         var form = document.getElementById('form_categories');
@@ -193,4 +168,78 @@
         input.value = id;
         form.submit();
     }
+    function getMachineDetail(id) {
+        var form = document.getElementById('form_machine');
+        var input = document.getElementById('machine_id');
+        input.value = id;
+        form.submit();
+    }
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="../../../../public/js/jQuery/jquery-3.6.0.min.js"></script>
+<script>
+    
+
+$(document).ready(function () {
+    // Send Search Text to the server
+    $("#search").keyup(function () {
+        let searchText = $(this).val();
+        if (searchText != "") {
+        $.ajax({
+            url: "action/actionSearch.php",
+            method: "post",
+            data: {
+                query: searchText,
+            },
+            success: function (response) {
+                $("#show-list").css('display','block');
+                $("#show-list").html(response);
+            },
+        });
+        } else {
+            $("#show-list").css('display','none');
+            $("#show-list").html("");
+        }
+    });
+    // Set searched text in input field on click of search button
+    $(document).on("click", "a", function () {
+        $("#search").val($(this).text());
+        $("#show-list").html("");
+    });
+});
+
+
+function hideLink() {
+    $("#show-list").css("display","none");
+}
+</script>
+
+<script>
+    function isEntreprise() {
+        const select = document.getElementById('select_entreprise').value;
+        const showEntreprise = document.getElementById('is_entreprise');
+
+        if( select == "oui" ) {
+            showEntreprise.style.display = "block";
+        }else {
+            showEntreprise.style.display = "none";
+        }
+    }
+
+
+    // password hide 
+    // Hide and show password
+    const eyeIcons = document.querySelectorAll(".show-hide");
+
+    eyeIcons.forEach((eyeIcon) => {
+    eyeIcon.addEventListener("click", () => {
+        const pInput = eyeIcon.parentElement.querySelector("input"); //getting parent element of eye icon and selecting the password input
+        if (pInput.type === "password") {
+        eyeIcon.classList.replace("bx-hide", "bx-show");
+        return (pInput.type = "text");
+        }
+        eyeIcon.classList.replace("bx-show", "bx-hide");
+        pInput.type = "password";
+    });
+    });
 </script>

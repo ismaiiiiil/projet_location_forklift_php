@@ -1,4 +1,19 @@
-<?php 
+<?php
+
+use app\Controllers\CategoryController;
+require_once '../../../vendor/autoload.php';
+
+
+
+$category = new CategoryController($_POST) ;
+
+
+if(isset($_POST['searchCategory']) && !empty(['searchCategory'])) {
+  $category->getAllCategoriesByName($_POST['searchCategory']);
+}else {
+  $category->getAllCategories();
+}
+
 include 'layout/header.php';
 ?>
 <body>
@@ -7,65 +22,6 @@ include 'layout/header.php';
     - #HEADER
   -->
 
-  <!-- <header class="header" data-header>
-    <div class="container">
-
-      <div class="overlay" data-overlay></div>
-
-      <a href="#" class="logo">
-        <img src="../../../public/images/logo.png" width="70" height="70" alt="Ridex logo">
-      </a>
-
-      <nav class="navbar" data-navbar>
-        <ul class="navbar-list">
-
-          <li>
-            <a href="#home" class="navbar-link" data-nav-link>Home</a>
-          </li>
-
-          <li>
-            <a href="#featured-car" class="navbar-link" data-nav-link>Explore cars</a>
-          </li>
-
-          <li>
-            <a href="#" class="navbar-link" data-nav-link>About us</a>
-          </li>
-
-          <li>
-            <a href="#blog" class="navbar-link" data-nav-link>Blog</a>
-          </li>
-
-        </ul>
-      </nav>
-
-      <div class="header-actions">
-
-        <div class="header-contact">
-          <a href="tel:88002345678" class="contact-link">8 800 234 56 78</a>
-
-          <span class="contact-time">Mon - Sat: 9:00 am - 6:00 pm</span>
-        </div>
-
-        <a href="#featured-car" class="btn" aria-labelledby="aria-label-txt">
-          <ion-icon name="car-outline"></ion-icon>
-
-          <span id="aria-label-txt">Explore cars</span>
-        </a>
-
-        <a href="#" class="btn user-btn" aria-label="Profile">
-          <ion-icon name="person-outline"></ion-icon>
-        </a>
-
-        <button class="nav-toggle-btn" data-nav-toggle-btn aria-label="Toggle Menu">
-          <span class="one"></span>
-          <span class="two"></span>
-          <span class="three"></span>
-        </button>
-
-      </div>
-
-    </div>
-  </header> -->
 
   <?php 
     include 'layout/navbar.php';
@@ -98,30 +54,19 @@ include 'layout/header.php';
 
                     <div class="hero-banner"></div>
 
-                    <form action="" class="hero-form">
-                        <div class="input-wrapper">
-                            <label for="input-1" class="input-label">Car, model, or brand</label>
-
-                            <input type="text" name="car-model" id="input-1" class="input-field"
-                                placeholder="What car are you looking?" />
-                        </div>
-
-                        <div class="input-wrapper">
-                            <label for="input-2" class="input-label">Max. monthly payment</label>
-
-                            <input type="text" name="monthly-pay" id="input-2" class="input-field"
-                                placeholder="Add an amount in $" />
-                        </div>
-
-                        <div class="input-wrapper">
-                            <label for="input-3" class="input-label">Make Year</label>
-
-                            <input type="text" name="year" id="input-3" class="input-field"
-                                placeholder="Add a minimal make year" />
-                        </div>
-
-                        <button type="submit" class="btn">Search</button>
+                    <form method="POST">
+                      <div class="input-box">
+                        <i class="uil uil-search"></i>
+                        <input
+                          autocomplete="off" name="searchCategory" 
+                          id="search" type="text" placeholder="Search here..." 
+                        />
+                        <button class="button">Search</button>
+                      </div>
                     </form>
+                    <div class="search-box" id="show-list">
+                      <!-- Here autocomplete list will be display -->
+                    </div>
                 </div>
             </section>
 
@@ -145,145 +90,32 @@ include 'layout/header.php';
               <ion-icon name="arrow-forward-outline"></ion-icon>
             </a>
           </div>
+
           <form id='form_categories' action="machine_list.php" method="post">
             <input type="hidden" name="category_id" id="category_id">
           </form>
+
           <ul class="featured-car-list">
-          
+            <?php for($i = 0; $i < count($category->t); $i++) { ?>
+              <li onclick="getAllMachine(<?= $category->t[$i]->getId() ?>)" class="car-category">
+                <div class="featured-car-card">
 
-            <li onclick="getAllMachine(1)" class="car-category">
-              <div class="featured-car-card">
+                  <figure class="card-banner">
+                    <img src="../../../public/images/<?= $category->t[$i]->getImage() ?>" alt="Toyota RAV4 2021" loading="lazy" width="440" height="300"
+                      class="w-100">
+                  </figure>
 
-                <figure class="card-banner">
-                  <img src="../../../public/images/JCP.png" alt="Toyota RAV4 2021" loading="lazy" width="440" height="300"
-                    class="w-100">
-                </figure>
+                  <div class="card-content">
 
-                <div class="card-content">
-
-                  <div class="card-title-wrapper">
-                    <h3 class="h3 card-title">
-                      <a href="#">Toyota RAV4</a>
-                    </h3>
+                    <div class="card-title-wrapper">
+                      <h3 class="h3 card-title">
+                        <a href="#"><?= $category->t[$i]->getNom() ?></a>
+                      </h3>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </li>
-
-            <li class="car-category">
-              <div class="featured-car-card">
-
-                <figure class="card-banner">
-                  <img src="../../../public/images/crack1.png" alt="Toyota RAV4 2021" loading="lazy" width="440" height="300"
-                    class="w-100">
-                </figure>
-
-                <div class="card-content">
-
-                  <div class="card-title-wrapper">
-                    <h3 class="h3 card-title">
-                      <a href="#">Toyota RAV4</a>
-                    </h3>
-                  </div>
-                </div>
-              </div>
-            </li>
-
-            <li class="car-category">
-              <div class="featured-car-card">
-
-                <figure class="card-banner">
-                  <img src="../../../public/images/JCP.png" alt="Toyota RAV4 2021" loading="lazy" width="440" height="300"
-                    class="w-100">
-                </figure>
-
-                <div class="card-content">
-
-                  <div class="card-title-wrapper">
-                    <h3 class="h3 card-title">
-                      <a href="#">Toyota RAV4</a>
-                    </h3>
-                  </div>
-                </div>
-              </div>
-            </li>
-
-            <li class="car-category">
-              <div class="featured-car-card">
-
-                <figure class="card-banner">
-                  <img src="../../../public/images/Manitou-catg.png" alt="Toyota RAV4 2021" loading="lazy" width="440" height="300"
-                    class="w-100">
-                </figure>
-
-                <div class="card-content">
-
-                  <div class="card-title-wrapper">
-                    <h3 class="h3 card-title">
-                      <a href="#">Toyota RAV4</a>
-                    </h3>
-                  </div>
-                </div>
-              </div>
-            </li>
-
-            <li class="car-category">
-              <div class="featured-car-card">
-
-                <figure class="card-banner">
-                  <img src="../../../public/images/truck-catg.png" alt="Toyota RAV4 2021" loading="lazy" width="440" height="300"
-                    class="w-100">
-                </figure>
-
-                <div class="card-content">
-
-                  <div class="card-title-wrapper">
-                    <h3 class="h3 card-title">
-                      <a href="#">Toyota RAV4</a>
-                    </h3>
-                  </div>
-                </div>
-              </div>
-            </li>
-
-            <li class="car-category">
-              <div class="featured-car-card">
-
-                <figure class="card-banner">
-                  <img src="../../../public/images/GCP-catg.png" alt="Toyota RAV4 2021" loading="lazy" width="440" height="300"
-                    class="w-100">
-                </figure>
-
-                <div class="card-content">
-
-                  <div class="card-title-wrapper">
-                    <h3 class="h3 card-title">
-                      <a href="#">Toyota RAV4</a>
-                    </h3>
-                  </div>
-                </div>
-              </div>
-            </li>
-
-            <li class="car-category">
-              <div class="featured-car-card">
-
-                <figure class="card-banner">
-                  <img src="../../../public/images/crack-catg.png" alt="Toyota RAV4 2021" loading="lazy" width="440" height="300"
-                    class="w-100">
-                </figure>
-
-                <div class="card-content">
-
-                  <div class="card-title-wrapper">
-                    <h3 class="h3 card-title">
-                      <a href="#">Toyota RAV4</a>
-                    </h3>
-                  </div>
-                </div>
-              </div>
-            </li>
-
+              </li>
+            <?php } ?>
           </ul>
 
         </div>
@@ -298,6 +130,8 @@ include 'layout/header.php';
       -->
 
       <section class="section get-start">
+        <?php include('layout/alert.php'); ?>
+
         <div class="container">
 
           <h2 class="h2 section-title">Get started with 4 simple steps</h2>

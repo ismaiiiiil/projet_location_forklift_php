@@ -1,0 +1,11 @@
+{
+    "name": "vendor/is",
+    "autoload": {
+        "psr-4": {
+            "app\\": "app/",
+            "database\\": "database/"
+
+        }
+    },
+    "require": {}
+}

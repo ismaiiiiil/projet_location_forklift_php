@@ -7,10 +7,55 @@
     margin-bottom: 3rem;
     place-items: center;
 }
+.my-2 {
+    margin: 10px 5px;
+}
+.text-danger {
+    color: #f92313;
+    font-weight: 600;
+}
+/* icon hide password */
+.field-password .show-hide {
+    position: absolute;
+    right: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #919191;
+    cursor: pointer;
+    padding: 3px;
+}
 
+  form .field-password {
+    position: relative;
+    height: 55px;
+    width: 100%;
+  }
+  .field-password input {
+    height: 100%;
+    width: 100%;
+    outline: none;
+    border: none;
+    border-radius: 8px;
+    padding: 0 15px;
+    border: 1px solid #d1d1d1;
+  }
+  .field-password .show-hide {
+    position: absolute;
+    right: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #919191;
+    cursor: pointer;
+    padding: 3px;
+  }
+  
+  /* ---------- */
 .wrapper {
     overflow: hidden;
     max-width: 390px;
+    width: 70%;
     background: #fff;
     padding: 30px;
     border-radius: 5px;
@@ -116,6 +161,8 @@
     border-bottom-width: 2px;
     font-size: 17px;
     transition: all 0.3s ease;
+    position: relative;
+
 }
 .wrapper .form-inner form .field input:focus,
 .wrapper .form-inner form .field select:focus {
