@@ -1,7 +1,13 @@
-<?php
-    include 'layout/header.php';
-    include 'layout/sidebar.php';
+
+include 'layout/header.php';
+include 'layout/sidebar.php';
 ?>
+
+<body>
+
+    <div class="main-wrapper">
+
+        <?= include('layout/navbar.php') ?>
 
 
         <div class="page-wrapper">

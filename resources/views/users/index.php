@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 use app\Controllers\CategoryController;
 require_once '../../../vendor/autoload.php';
 
@@ -70,17 +70,17 @@ include 'layout/header.php';
                 </div>
             </section>
 
-
-
-
-
       <!-- 
         - #FEATURED CAR MACHINES
       -->
 
       <section class="section featured-car" id="featured-car">
+      
         <div class="container">
 
+        <div class="alert-message">
+          <?php include('layout/alert.php'); ?>
+        </div>
           <div class="title-wrapper">
             <h2 class="h2 section-title">Featured cars</h2>
 
@@ -130,7 +130,6 @@ include 'layout/header.php';
       -->
 
       <section class="section get-start">
-        <?php include('layout/alert.php'); ?>
 
         <div class="container">
 

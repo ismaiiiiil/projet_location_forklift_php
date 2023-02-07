@@ -37,11 +37,16 @@
                     <ion-icon name="home-outline"></ion-icon>
                     <span id="aria-label-txt">Home</span>
                 </a>
-
+                <?php if(!isset($_SESSION['login'])) { ?>
                 <a href="login.php" class="btn user-btn" aria-label="Profile">
                     <ion-icon name="person-outline"></ion-icon>
-                    <!-- <ion-icon name="log-in-outline"></ion-icon> -->
                 </a>
+                <?php }else { ?>
+                    <a href="logout.php" class="btn user-btn danger" aria-label="Profile">
+                        <ion-icon name="log-in-outline"></ion-icon>
+                    </a>
+                <?php } ?>
+                
 
                 <button class="nav-toggle-btn" data-nav-toggle-btn aria-label="Toggle Menu">
                     <span class="one"></span>

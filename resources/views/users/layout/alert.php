@@ -51,10 +51,10 @@
         </div>
     <?php } ?>
 
-    <?php if(isset($_COOKIE['danger'])){ ?>
+    <?php if(isset($_COOKIE['error'])){ ?>
         <div class="alert alert-danger">
             <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-            <?= $_COOKIE['danger']  ?>
+            <?= $_COOKIE['error']  ?>
         </div>
     <?php } ?>
 

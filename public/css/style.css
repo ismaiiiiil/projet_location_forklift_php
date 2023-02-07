@@ -272,6 +272,10 @@ button, a { transition: var(--transition); }
   --shadow-2: var(--shadow-1);
   box-shadow: var(--shadow-1);
 }
+.danger {
+  background: rgb(220, 20, 30);
+  color: #fff;
+}
 
 .nav-toggle-btn span {
   background: var(--independence);
@@ -473,7 +477,11 @@ button, a { transition: var(--transition); }
   }
 }
  
-
+/* alert  */
+.alert-message {  
+  width: 50%;
+  margin: 10px auto;
+}
 /* ---------- */
 
 .hero-form .btn {
@@ -586,8 +594,16 @@ button, a { transition: var(--transition); }
 }
 
 .featured-car-card .card-banner {
+  /* background: hsla(0, 0%, 0%, 0.2);
+  aspect-ratio: 3 / 3;
+  border-radius: var(--radius-18);
+  overflow: hidden; */
+
+  /* ----------- */
   background: hsla(0, 0%, 0%, 0.2);
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 3 / 3;
+  height: 300px;
+  width: 100%;
   border-radius: var(--radius-18);
   overflow: hidden;
 }
@@ -1008,6 +1024,9 @@ button, a { transition: var(--transition); }
     max-width: 540px;
     margin-inline: auto;
   }
+  .alert-message {  
+    width: 80%;
+  }
 
 
 
@@ -1057,7 +1076,9 @@ button, a { transition: var(--transition); }
 
   .container { max-width: 720px; }
 
-
+  .alert-message {  
+    width: 50%;
+  }
 
   /**
    * HEADER
@@ -1187,7 +1208,9 @@ button, a { transition: var(--transition); }
   .container { max-width: 960px; }
 
 
-
+  .alert-message {  
+    width: 50%;
+  }
   /**
    * HERO
    */

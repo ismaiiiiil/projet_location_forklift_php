@@ -1,7 +1,48 @@
 <?php
-    include 'layout/header.php';
-    include 'layout/sidebar.php';
+
+use app\Controllers\UserController;
+
+require_once '../../../vendor/autoload.php';
+
+
+
+
+$useres = new UserController($_POST);
+
+
+
+$usereserch = $useres->getAllUserSearch();
+
+$search_name = "";
+$search_entreprise="";
+
+if (isset($_POST["Search"])) {
+    $search_name = isset($_POST["search_name"]) ? $_POST["search_name"] : "";
+    $search_entreprise = isset($_POST['search_entreprise']) ? $_POST['search_entreprise'] : "";
+
+    if ($search_name === "all") {
+        $useres->getAllUser();
+    } else {
+        $useres->getAllUseresByNameEntreprise($search_name, $search_entreprise);
+    }
+} else {
+    $useres->getAllUser();
+}
+
+
+if (isset($_POST['id_delete'])) {
+    $useres->deleteUser($_POST['id_delete']);
+}
+include 'layout/header.php';
 ?>
+
+<body>
+
+    <div class="main-wrapper">
+
+        <?= include('layout/navbar.php') ;
+        include 'layout/sidebar.php';
+        ?>
 
 
         <div class="page-wrapper">
@@ -11,10 +52,10 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="page-sub-header">
-                                <h3 class="page-title">Students</h3>
+                                <h3 class="page-title">useres</h3>
                                 <ul class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="students.html">Student</a></li>
-                                    <li class="breadcrumb-item active">All Students</li>
+                                    <li class="breadcrumb-item"><a href="user.php">Users</a></li>
+                                    <li class="breadcrumb-item active">All useres</li>
                                 </ul>
                             </div>
                         </div>
@@ -22,29 +63,50 @@
                 </div>
 
                 <div class="student-group-form">
-                    <div class="row">
+                    <form method="POST" class="row">
                         <div class="col-lg-3 col-md-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Search by ID ...">
+                                <select class="form-control " name="search_name">
+                                    <option disabled selected>Search by Name user...</option>
+                                    <option value="all">Select all users </option>
+                                    <?php foreach($usereserch as $user) { ?>
+                                        <option
+                                        <?= $user->nom == $search_name ? "selected" : ""  ?>
+                                        value="<?= $user->nom ?>">
+                                            <?= $user->nom ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>
                             </div>
                         </div>
+
                         <div class="col-lg-3 col-md-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Search by Name ...">
+                                <select class="form-control " name="search_entreprise">
+                                    <option value="all">Is entreprise ou non</option>
+                                    <option 
+                                        <?= $search_entreprise == "1" ? "selected" : ""  ?>
+                                        value="1">
+                                        Oui
+                                    </option>
+                                    <option
+                                        <?= $search_entreprise == "0" ? "selected" : ""  ?>
+                                        value="0">
+                                            Nom
+                                    </option>
+                                </select>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-6">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Search by Phone ...">
-                            </div>
-                        </div>
+
                         <div class="col-lg-2">
                             <div class="search-student-btn">
-                                <button type="btn" class="btn btn-primary">Search</button>
+                                <input type="submit" value="Search" name="Search" class="btn btn-primary">
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
+                <!-- Alert message -->
+                <?php include("layout/alert.php"); ?>
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="card card-table comman-shadow">
@@ -53,14 +115,11 @@
                                 <div class="page-header">
                                     <div class="row align-items-center">
                                         <div class="col">
-                                            <h3 class="page-title">Students</h3>
+                                            <h3 class="page-title">Useres</h3>
                                         </div>
-                                        <div class="col-auto text-end float-end ms-auto download-grp">
-                                            <a href="students.html" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
-                                            <a href="students-grid.html" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>
-                                            <a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a>
-                                            <a href="add-student.html" class="btn btn-primary"><i class="fas fa-plus"></i></a>
-                                        </div>
+                                        <!-- <div class="col-auto text-end float-end ms-auto download-grp">
+                                            <a href="add-machine.php" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                        </div> -->
                                     </div>
                                 </div>
 
@@ -68,343 +127,64 @@
                                     <table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
                                         <thead class="student-thread">
                                             <tr>
-                                                <th>
-                                                    <div class="form-check check-tables">
-                                                        <input class="form-check-input" type="checkbox" value="something">
-                                                    </div>
-                                                </th>
                                                 <th>ID</th>
-                                                <th>Name</th>
-                                                <th>Class</th>
-                                                <th>DOB</th>
-                                                <th>Parent Name</th>
-                                                <th>Mobile Number</th>
-                                                <th>Address</th>
+                                                <th>Nom</th>
+                                                <th>Prenom</th>
+                                                <th>Email</th>
+                                                <th>Tel</th>
+                                                <th>Is Entreprise</th>
+                                                <th>Nom entreprise</th>
+                                                <th>Email entreprise</th>
                                                 <th class="text-end">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check check-tables">
-                                                        <input class="form-check-input" type="checkbox" value="something">
-                                                    </div>
-                                                </td>
-                                                <td>PRE2209</td>
-                                                <td>
-                                                    <h2 class="table-avatar">
-                                                        <a href="student-details.html" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-01.jpg" alt="User Image"></a>
-                                                        <a href="student-details.html">Aaliyah</a>
-                                                    </h2>
-                                                </td>
-                                                <td>10 A</td>
-                                                <td>2 Feb 2002</td>
-                                                <td>Jeffrey Wong</td>
-                                                <td>097 3584 5870</td>
-                                                <td>911 Deer Ridge Drive,USA</td>
-                                                <td class="text-end">
-                                                    <div class="actions ">
-                                                        <a href="javascript:;" class="btn btn-sm bg-success-light me-2 ">
-                                                            <i class="feather-eye"></i>
-                                                        </a>
-                                                        <a href="edit-student.html" class="btn btn-sm bg-danger-light">
-                                                            <i class="feather-edit"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check check-tables">
-                                                        <input class="form-check-input" type="checkbox" value="something">
-                                                    </div>
-                                                </td>
-                                                <td>PRE2213</td>
-                                                <td>
-                                                    <h2 class="table-avatar">
-                                                        <a href="student-details.html" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-03.jpg" alt="User Image"></a>
-                                                        <a href="student-details.html">Malynne</a>
-                                                    </h2>
-                                                </td>
-                                                <td>8 A</td>
-                                                <td>3 June 2010</td>
-                                                <td>Fields Malynne</td>
-                                                <td>242 362 3100</td>
-                                                <td>Bacardi Rd P.O. Box N-4880, New Providence</td>
-                                                <td class="text-end">
-                                                    <div class="actions ">
-                                                        <a href="javascript:;" class="btn btn-sm bg-success-light me-2 ">
-                                                            <i class="feather-eye"></i>
-                                                        </a>
-                                                        <a href="edit-student.html" class="btn btn-sm bg-danger-light">
-                                                            <i class="feather-edit"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check check-tables">
-                                                        <input class="form-check-input" type="checkbox" value="something">
-                                                    </div>
-                                                </td>
-                                                <td>PRE2143</td>
-                                                <td>
-                                                    <h2 class="table-avatar">
-                                                        <a href="student-details.html" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-02.jpg" alt="User Image"></a>
-                                                        <a href="student-details.html">Levell Scott</a>
-                                                    </h2>
-                                                </td>
-                                                <td>10 A</td>
-                                                <td>12 Apr 2002</td>
-                                                <td>Jeffrey Scott</td>
-                                                <td>026 7318 4366</td>
-                                                <td>P.O. Box: 41, Gaborone</td>
-                                                <td class="text-end">
-                                                    <div class="actions ">
-                                                        <a href="javascript:;" class="btn btn-sm bg-success-light me-2 ">
-                                                            <i class="feather-eye"></i>
-                                                        </a>
-                                                        <a href="edit-student.html" class="btn btn-sm bg-danger-light">
-                                                            <i class="feather-edit"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check check-tables">
-                                                        <input class="form-check-input" type="checkbox" value="something">
-                                                    </div>
-                                                </td>
-                                                <td>PRE2431</td>
-                                                <td>
-                                                    <h2 class="table-avatar">
-                                                        <a href="student-details.html" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-03.jpg" alt="User Image"></a>
-                                                        <a href="student-details.html">Minnie</a>
-                                                    </h2>
-                                                </td>
-                                                <td>11 C</td>
-                                                <td>24 Feb 2000</td>
-                                                <td>J Shaffer</td>
-                                                <td>952 512 4909</td>
-                                                <td>4771 Oral Lake Road, Golden Valley</td>
-                                                <td class="text-end">
-                                                    <div class="actions ">
-                                                        <a href="javascript:;" class="btn btn-sm bg-success-light me-2 ">
-                                                            <i class="feather-eye"></i>
-                                                        </a>
-                                                        <a href="edit-student.html" class="btn btn-sm bg-danger-light">
-                                                            <i class="feather-edit"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check check-tables">
-                                                        <input class="form-check-input" type="checkbox" value="something">
-                                                    </div>
-                                                </td>
-                                                <td>PRE1534</td>
-                                                <td>
-                                                    <h2 class="table-avatar">
-                                                        <a href="student-details.html" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-04.jpg" alt="User Image"></a>
-                                                        <a href="student-details.html">Lois A</a>
-                                                    </h2>
-                                                </td>
-                                                <td>10 A</td>
-                                                <td>22 Jul 2006</td>
-                                                <td>Cleary Wong</td>
-                                                <td>413 289 1314</td>
-                                                <td>2844 Leverton Cove Road, Palmer</td>
-                                                <td class="text-end">
-                                                    <div class="actions ">
-                                                        <a href="javascript:;" class="btn btn-sm bg-success-light me-2 ">
-                                                            <i class="feather-eye"></i>
-                                                        </a>
-                                                        <a href="edit-student.html" class="btn btn-sm bg-danger-light">
-                                                            <i class="feather-edit"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check check-tables">
-                                                        <input class="form-check-input" type="checkbox" value="something">
-                                                    </div>
-                                                </td>
-                                                <td>PRE2153</td>
-                                                <td>
-                                                    <h2 class="table-avatar">
-                                                        <a href="student-details.html" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-05.jpg" alt="User Image"></a>
-                                                        <a href="student-details.html">Calvin</a>
-                                                    </h2>
-                                                </td>
-                                                <td>9 B</td>
-                                                <td>8 Dec 2003</td>
-                                                <td>Minnie J Shaffer</td>
-                                                <td>701 753 3810</td>
-                                                <td>1900 Hidden Meadow Drive, Crete</td>
-                                                <td class="text-end">
-                                                    <div class="actions ">
-                                                        <a href="javascript:;" class="btn btn-sm bg-success-light me-2 ">
-                                                            <i class="feather-eye"></i>
-                                                        </a>
-                                                        <a href="edit-student.html" class="btn btn-sm bg-danger-light">
-                                                            <i class="feather-edit"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check check-tables">
-                                                        <input class="form-check-input" type="checkbox" value="something">
-                                                    </div>
-                                                </td>
-                                                <td>PRE1252</td>
-                                                <td>
-                                                    <h2 class="table-avatar">
-                                                        <a href="student-details.html" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-06.jpg" alt="User Image"></a>
-                                                        <a href="student-details.html">Joe Kelley</a>
-                                                    </h2>
-                                                </td>
-                                                <td>11 C</td>
-                                                <td>7 Oct 2000</td>
-                                                <td>Vincent Howard</td>
-                                                <td>402 221 7523</td>
-                                                <td>3979 Ashwood Drive, Omaha</td>
-                                                <td class="text-end">
-                                                    <div class="actions ">
-                                                        <a href="javascript:;" class="btn btn-sm bg-success-light me-2 ">
-                                                            <i class="feather-eye"></i>
-                                                        </a>
-                                                        <a href="edit-student.html" class="btn btn-sm bg-danger-light">
-                                                            <i class="feather-edit"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check check-tables">
-                                                        <input class="form-check-input" type="checkbox" value="something">
-                                                    </div>
-                                                </td>
-                                                <td>PRE1434</td>
-                                                <td>
-                                                    <h2 class="table-avatar">
-                                                        <a href="student-details.html" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-07.jpg" alt="User Image"></a>
-                                                        <a href="student-details.html">Vincent</a>
-                                                    </h2>
-                                                </td>
-                                                <td>10 A</td>
-                                                <td>4 Jan 2002</td>
-                                                <td>Kelley Joe</td>
-                                                <td>402 221 7523</td>
-                                                <td>3979 Ashwood Drive, Omaha</td>
-                                                <td class="text-end">
-                                                    <div class="actions ">
-                                                        <a href="javascript:;" class="btn btn-sm bg-success-light me-2 ">
-                                                            <i class="feather-eye"></i>
-                                                        </a>
-                                                        <a href="edit-student.html" class="btn btn-sm bg-danger-light">
-                                                            <i class="feather-edit"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check check-tables">
-                                                        <input class="form-check-input" type="checkbox" value="something">
-                                                    </div>
-                                                </td>
-                                                <td>PRE2345</td>
-                                                <td>
-                                                    <h2 class="table-avatar">
-                                                        <a href="student-details.html" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-08.jpg" alt="User Image"></a>
-                                                        <a href="student-details.html">Kozma  Tatari</a>
-                                                    </h2>
-                                                </td>
-                                                <td>9 A</td>
-                                                <td>1 Feb 2006</td>
-                                                <td>Lombardi</td>
-                                                <td>04 2239 968</td>
-                                                <td>Rruga E Kavajes, Condor Center, Tirana</td>
-                                                <td class="text-end">
-                                                    <div class="actions ">
-                                                        <a href="javascript:;" class="btn btn-sm bg-success-light me-2 ">
-                                                            <i class="feather-eye"></i>
-                                                        </a>
-                                                        <a href="edit-student.html" class="btn btn-sm bg-danger-light">
-                                                            <i class="feather-edit"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check check-tables">
-                                                        <input class="form-check-input" type="checkbox" value="something">
-                                                    </div>
-                                                </td>
-                                                <td>PRE2365</td>
-                                                <td>
-                                                    <h2 class="table-avatar">
-                                                        <a href="student-details.html" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-09.jpg" alt="User Image"></a>
-                                                        <a href="student-details.html">John Chambers</a>
-                                                    </h2>
-                                                </td>
-                                                <td>11 B</td>
-                                                <td>13 Sept 2003</td>
-                                                <td>Wong Jeffrey</td>
-                                                <td>870 663 2334</td>
-                                                <td>4667 Sunset Drive, Pine Bluff</td>
-                                                <td class="text-end">
-                                                    <div class="actions ">
-                                                        <a href="javascript:;" class="btn btn-sm bg-success-light me-2 ">
-                                                            <i class="feather-eye"></i>
-                                                        </a>
-                                                        <a href="edit-student.html" class="btn btn-sm bg-danger-light">
-                                                            <i class="feather-edit"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check check-tables">
-                                                        <input class="form-check-input" type="checkbox" value="something">
-                                                    </div>
-                                                </td>
-                                                <td>PRE1234</td>
-                                                <td>
-                                                    <h2 class="table-avatar">
-                                                        <a href="student-details.html" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-10.jpg" alt="User Image"></a>
-                                                        <a href="student-details.html">Nathan Humphries</a>
-                                                    </h2>
-                                                </td>
-                                                <td>10 B</td>
-                                                <td>26 Apr 1994</td>
-                                                <td>Stephen Marley</td>
-                                                <td>077 3499 9959</td>
-                                                <td>86 Lamphey Road, Thelnetham</td>
-                                                <td class="text-end">
-                                                    <div class="actions ">
-                                                        <a href="javascript:;" class="btn btn-sm bg-success-light me-2 ">
-                                                            <i class="feather-eye"></i>
-                                                        </a>
-                                                        <a href="edit-student.html" class="btn btn-sm bg-danger-light">
-                                                            <i class="feather-edit"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            <?php
+                                            for ($i = 0; $i < count($useres->t); $i++) {
+                                            ?>
+                                                <tr>
+                                                    <td><?= $i + 1 ?></td>
+                                                
+                                                    <td><?= $useres->t[$i]->getNom() ?></td>
+                                                    <td><?= $useres->t[$i]->getPrenom() ?></td>
+                                                    <td><?= $useres->t[$i]->getEmail() ?></td>
+                                                    <td><?= $useres->t[$i]->getTel() ?></td>
+
+                                                    <?php if( $useres->t[$i]->getIsEntreprise() === 0) { ?>
+                                                        <td>
+                                                            <span class="badge badge-danger">non</span>    
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge badge-outline-danger">null</span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge badge-outline-danger">null</span>
+                                                        </td>
+                                                    <?php } else { ?>
+                                                        <td>
+                                                            <span class="badge badge-success">oui</span>    
+                                                        </td>
+                                                        <td><?= $useres->t[$i]->getNomEntreprise() ?></td>
+                                                        <td><?= $useres->t[$i]->getEmailEntreprise() ?></td>
+                                                    <?php } ?>
+
+                                                    <td class="text-end">
+                                                        <div class="actions ">
+                                
+                                                            <!-- model  Delete-->
+                                                            <a type="button" onclick="deleteUser(<?= $useres->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light" data-bs-toggle="modal" data-bs-target="#model-delete">
+                                                                <i class="fa-solid fa-trash-can"></i>
+                                                            </a>
+
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            <?php
+                                            }
+                                            ?>
                                         </tbody>
                                     </table>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -412,6 +192,35 @@
                 </div>
             </div>
 
+            <div id="model-delete" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-sm modal-right">
+                    <div class="modal-content">
+                        <div class="modal-header border-0">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="text-center">
+                                <h4 class="mt-0">Voulez-vous vraiment supprimer cet user ?</h4>
+                                <small class="font-weight-bold" style="color:#edb200;">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    Cette action ne peut pas être annulée !
+                                </small>
+                                <hr/>
+                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                <!-- delete -->
+                                <button type="submit" onclick="submitFormDetete()" class="btn btn-danger btn-sm" data-bs-dismiss="modal">
+                                    Delete
+                                </button>
+
+                                <form id='form_delete' method="POST">
+                                    <input type="hidden" name="id_delete" id="id_delete">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Prix Machine -->
             <footer>
                 <p>Copyright © 2022 Dreamguys.</p>
             </footer>
@@ -432,6 +241,19 @@
     <script src="assets/plugins/datatables/datatables.min.js"></script>
 
     <script src="assets/js/script.js"></script>
+
+
+    <script>
+        function deleteUser($id) {
+            var form = document.getElementById('form_delete');
+            var input = document.getElementById('id_delete');
+            input.value = $id;
+        }
+        function submitFormDetete() {
+            var form = document.getElementById('form_delete');
+            form.submit();
+        }
+    </script>
 </body>
 
 </html>

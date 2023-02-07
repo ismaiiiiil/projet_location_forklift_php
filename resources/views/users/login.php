@@ -1,4 +1,11 @@
 <?php
+session_start();
+// 
+if(isset($_SESSION['login'])) {
+    header('Location: index.php');
+}
+
+
 require_once '../../../vendor/autoload.php';
 
 
@@ -7,8 +14,8 @@ use app\Controllers\UserController;
 
 $user = new UserController($_POST);
 
-if(isset($_POST['Signup'])) {
-    var_dump($_POST);
+if(isset($_POST['Login'])) {
+    $user->login();
 }
 
 
@@ -32,7 +39,7 @@ include 'layout/header.php';
     <!-- 
     - #HEADER
 -->
-    
+
     <?php
     include 'layout/navbar.php';
     ?>
@@ -51,15 +58,15 @@ include 'layout/header.php';
                     <div class="form-inner">
                         <form action="#" method="POST" class="login">
                             <div class="field">
-                                <input type="text" placeholder="Email Address" >
+                                <input type="text" name="login" placeholder="Email ou name" >
                             </div>
                             <div class="field">
-                                <input type="password" placeholder="Password" >
+                                <input type="password" name="password" placeholder="Password" >
                             </div>
                     
                             <div class="field btn">
                                 <div class="btn-layer"></div>
-                                <input type="submit" value="Login">
+                                <input type="submit" value="Login" name="Login">
                             </div>
                             <div class="signup-link">
                                 Not a member? <a href="signup.php">Signup now</a>

@@ -1,24 +1,31 @@
 <?php
 namespace app\Controllers;
 
+use PDO;
+use Exception;
 use database\DB;
+use app\Models\User;
 
 class UserController
 {
     private $postData;
     public $errors = [];
+    public $t = [];
+    public $cpt = 0;
 
     public function __construct($post_data) {
         $this->postData = $post_data;
     }
 
-    function test_input($data) {
+    function test_input($data) 
+    {
         $data = trim($data);
         $data = stripslashes($data);
         $data = htmlspecialchars($data);
         return $data;
     }
-    function validateSignupUser() {
+    function validateSignupUser() 
+    {
         $this->validateNom();
         $this->validatePrenom();
         $this->validateEmail();
@@ -28,7 +35,8 @@ class UserController
         
     }
 
-    function signup() {
+    function signup() 
+    {
         $nom = $this->test_input($this->postData['nom']);
         $prenom = $this->test_input($this->postData['prenom']);
         $email = $this->test_input($this->postData['email']);
@@ -81,41 +89,115 @@ class UserController
         }
     }
 
-
-    function login() {
-        $db = new DB();
-        $nom = $this->test_input($this->postData['nom']);
-        $email = $this->test_input($this->postData['email']);
-        $password = $this->test_input($this->postData['password']);
-
-        if(!empty($nom) || !empty($email) && !empty($password)) {
-            $sql = "SELECT * FROM users WHERE ;";
-            $stmt = $db::connection()->prepare($sql);
-            $stmt->execute([$email,$nom]);
-            if($stmt) {
-                BaseController::redirect('login');
-                BaseController::set('success' , 'Are you registered successfully');
+    function getAllUser() {
+        try{
+            $db =  new DB();
+            $sql = "SELECT * FROM users";
+            $res = $db::connection()->query($sql);
+            while ($row = $res->fetch()) {
+                $user = new User($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6], $row[7], $row[8]);
+                $this->t[$this->cpt] = $user;
+                $this->cpt++;
             }
+        }catch(Exception $e) {
+            echo 'Error: '.$e->getMessage();
         }
     }
 
 
+    function getAllUserSearch() 
+    {
+        try{
+            $db =  new DB();
+            $sql = "SELECT * FROM users";
+            $res = $db::connection()->query($sql);
+            return $res->fetchAll(PDO::FETCH_OBJ);
+        }catch(Exception $e) {
+            echo 'Error: '.$e->getMessage();
+        }
+    }
 
+    function getAllUseresByNameEntreprise($nomUser, $isEntreprise)
+    {
+        try {
+            $db = new DB();
+            if(!empty($nomUser)) 
+            {
+                if($isEntreprise == 1) {
+                    $sql = "SELECT * FROM users WHERE nom LIKE ? AND is_entreprise = 1";
+                }elseif($isEntreprise == 0){
+                    $sql = "SELECT * FROM users WHERE nom LIKE ? AND is_entreprise = 0";
+                }else {
+                    $sql = "SELECT * FROM users WHERE nom LIKE ? ";
+                }
+                $res = $db::connection()->prepare($sql);
+                $res->execute(["%" . $nomUser . "%"]);
+            }elseif(empty($nomUser)) {
+                if($isEntreprise == 1) {
+                    $sql = "SELECT * FROM users WHERE is_entreprise = 1";
+                }elseif($isEntreprise == 0){
+                    $sql = "SELECT * FROM users WHERE is_entreprise = 0";
+                }else {
+                    $sql = "SELECT * FROM users ";
+                }
+                $res = $db::connection()->query($sql);
+                $res->execute();
+            }
+            
+            while ($row = $res->fetch()) {
+                $user = new User($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6], $row[7], $row[8]);
+                $this->t[$this->cpt] = $user;
+                $this->cpt++;
+            }  
+        
+        }catch (Exception $e) {
+            echo 'Error: '.$e->getMessage();
+        }
+    }
 
+    function deleteUser($id)
+    {
+        try {
+            if (!empty($id)) {
+                $db = new DB();
+                $id = $this->test_input($id);
+                $stmt = $db::connection()->prepare("DELETE FROM users WHERE id = :id");
+                $stmt->execute([":id" => $id]);
+                BaseController::set('success', "User successfully deleted");
+                BaseController::redirect("users");
+            }
+        } catch (Exception $e) {
+            echo "Error deleting" . $e->getMessage();
+        }
+    }
 
+    function login() 
+    {
+        $db = new DB();
+        $login = $this->test_input($this->postData['login']);
+        $password = $this->test_input($this->postData['password']);
 
-
-
-
-
-
-
-
-
-
+        if(!empty($login) && !empty($password)) {
+            $sql = "SELECT * FROM users WHERE nom=? OR email=? AND password=?;";
+            $stmt = $db::connection()->prepare($sql);
+            $stmt->execute([$login,$login, $password]);
+            if($stmt->rowCount() > 0) {
+                $_SESSION['login'] = $login;
+                BaseController::redirect('index');
+                BaseController::set('success' , 'Are you loged successfully');
+            }else {
+                BaseController::redirect('login');
+                BaseController::set('error' , 'Login or password incorrect');
+            }
+        }else {
+            BaseController::redirect('login');
+            BaseController::set('error' , 'Tous les champs est obligatoire');
+        } 
+    }
 
     // Check if email exists
-    private function checkEmailExists($email) {
+    private function checkEmailExists($email) 
+    {
         if(!empty($email) && $this->validateEmail() !== false) {
             $db = new DB();
             $sql = "SELECT * FROM users WHERE email = ?";
@@ -130,18 +212,6 @@ class UserController
             return $result;
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
     // -------------------------------------
     // -- Validation --

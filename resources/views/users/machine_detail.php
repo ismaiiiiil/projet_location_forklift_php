@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require_once '../../../vendor/autoload.php';
 
 use app\Controllers\MachineController;
@@ -8,7 +10,7 @@ if(!isset($_POST['machine_id'])) {
     header('location:index.php');
 }
 
-$machines = new MachineController ;
+$machines = new MachineController($_POST) ;
 
 $machines = $machines->getMachineParId($_POST['machine_id']);
 
@@ -31,25 +33,28 @@ include 'layout/header.php';
                     <div class="product-imgs">
                         <div class="img-display">
                             <div class="img-showcase">
-                                <img class="img" src="<?= $machines->image1 ?>" alt="shoe image">
-                                <img class="img" src="<?= $machines->image2 ?>" alt="shoe image">
-                                <img class="img" src="<?= $machines->image3 ?>" alt="shoe image">
+                                <img class="img" src="../../../public/images/<?= $machines->image1 ?>" alt="shoe image">
+                                <img class="img" src="../../../public/images/<?= $machines->image2 ?>" alt="shoe image">
+                                <img class="img" src="../../../public/images/<?= $machines->image3 ?>" alt="shoe image">
                             </div>
                         </div>
                         <div class="img-select">
-                            <div class="img-item">
+                            <div class="img-item" style="width:33%;">
                                 <a href="#" data-id="1">
-                                    <img class="img" src="<?= $machines->image1 ?>" alt="shoe image">
+                                    <img class="img" style="height: 200px;"
+                                        src="../../../public/images/<?= $machines->image1 ?>" alt="shoe image">
                                 </a>
                             </div>
-                            <div class="img-item">
+                            <div class="img-item" style="width:33%;">
                                 <a href="#" data-id="2">
-                                    <img class="img" src="<?= $machines->image2 ?>" alt="shoe image">
+                                    <img class="img" style="height: 200px;"
+                                        src="../../../public/images/<?= $machines->image2 ?>" alt="shoe image">
                                 </a>
                             </div>
-                            <div class="img-item">
+                            <div class="img-item" style="width:33%;">
                                 <a href="#" data-id="3">
-                                    <img class="img" src="<?= $machines->image3 ?>" alt="shoe image">
+                                    <img class="img" style="height: 200px;" 
+                                        src="../../../public/images/<?= $machines->image3 ?>" alt="shoe image">
                                 </a>
                             </div>
                             
@@ -73,19 +78,21 @@ include 'layout/header.php';
                             
                         </div>
 
-                        <div class="purchase-info">
-                            <label for="">Qte:</label>
+                        <form class="purchase-info">
+                            <label>Qte:</label>
                             <input type="number" min="0" value="1">
-                            <label for="">Start Date:</label>
+                            <label>Start Date:</label>
                             <input type="date" name="premier_date">
-                            <label for="">End Date:</label>
+                            <label>End Date:</label>
                             <input type="date" name="deuxieme_date">
-
-                            <button type="button" class="btn">
-                                Add to Cart <i class="fas fa-shopping-cart"></i>
-                            </button>
-                            <button type="button" class="btn">Generate prix</button>
-                        </div>
+                            <div class="button-card">
+                                <button type="button" class="btn">
+                                    Add to Cart <i class="fas fa-shopping-cart"></i>
+                                </button>
+                                <button type="button" class="btn">Generate prix</button>
+                            </div>  
+                            
+                        </form>
                         <div class="product-price">
                             <p class="last-price">Old Price: <span>$257.00</span></p>
                             <p class="new-price">New Price: <span>$249.00 (5%)</span></p>

@@ -1,4 +1,9 @@
 <?php
+session_start();
+if(isset($_SESSION['login'])) {
+    header('Location: index.php');
+}
+
 require_once '../../../vendor/autoload.php';
 
 
@@ -6,22 +11,6 @@ require_once '../../../vendor/autoload.php';
 use app\Controllers\UserController;
 
 $user = new UserController($_POST);
-
-// if(isset($_POST['Signup'])) {
-//     $user->signup(); 
-// }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 include 'layout/header.php';

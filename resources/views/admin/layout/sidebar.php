@@ -13,27 +13,23 @@
                             </ul>
                         </li>
                         <li class="submenu">
-                            <a href="#"><i class="fas fa-graduation-cap"></i> <span> Machine</span> <span
+                            <a href="#"><i class="fa-solid fa-trowel"></i> <span> Machine</span> <span
                                     class="menu-arrow"></span></a>
                             <ul>
                                 <li><a href="machine.php">Machine List</a></li>
-                                <li><a href="machine-details.php">Machine View</a></li>
                                 <li><a href="add-machine.php">Machine Add</a></li>
-                                <li><a href="edit-machine.php">Machine Edit</a></li>
                             </ul>
                         </li>
                         <li class="submenu">
-                            <a href="#"><i class="fas fa-graduation-cap"></i> <span> Categories</span> <span
+                            <a href="#"><i class="fa-solid fa-grip-vertical"></i><span>Categories</span> <span
                                     class="menu-arrow"></span></a>
                             <ul>
                                 <li><a href="category.php">Category List</a></li>
-                                <li><a href="category-details.php">Category View</a></li>
                                 <li><a href="add-category.php">Category Add</a></li>
-                                <li><a href="edit-category.php">Category Edit</a></li>
                             </ul>
                         </li>
                         <li class="submenu">
-                            <a href="#"><i class="fas fa-graduation-cap"></i> <span> Users</span> <span
+                            <a href="#"><i class="fa-solid fa-users"></i> <span> Users</span> <span
                                     class="menu-arrow"></span></a>
                             <ul>
                                 <li><a href="users.php">Users List</a></li>

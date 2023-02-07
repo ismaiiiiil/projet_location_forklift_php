@@ -1,11 +1,32 @@
-
-
 <?php
-    include 'layout/header.php';
-    include 'layout/sidebar.php';
+
+use app\Controllers\CategoryController;
+use app\Controllers\MachineController;
+
+require_once '../../../vendor/autoload.php';
+
+$categories = new CategoryController($_POST);
+
+
+$nom = '';
+
+if (isset($_POST['Ajouter'])) {
+    $categories->addCategory();
+    $errors = $categories->errors;
+
+    if (isset($_POST['nom'])) $nom = $_POST['nom'];
+}
+
+include 'layout/header.php';
 ?>
 
+<body>
 
+    <div class="main-wrapper">
+
+        <?= include('layout/navbar.php') ;
+        include 'layout/sidebar.php';
+        ?>
         <div class="page-wrapper">
             <div class="content container-fluid">
 
@@ -13,147 +34,87 @@
                     <div class="row align-items-center">
                         <div class="col-sm-12">
                             <div class="page-sub-header">
-                                <h3 class="page-title">Add Category</h3>
+                                <h3 class="page-title">Category</h3>
                                 <ul class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="category.php">Student</a></li>
-                                    <li class="breadcrumb-item active">Add Category</li>
+                                    <li class="breadcrumb-item"><a href="category.php">Category</a></li>
+                                    <li class="breadcrumb-item active">Ajouter une category</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-
+                <!-- Alert message -->
+                <?php include("layout/alert.php"); ?>
                 <div class="row">
-                    <div class="col-sm-12">
-                        <div class="card comman-shadow">
+                
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Ajouter une category</h5>
+                            </div>
                             <div class="card-body">
-                                <form>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <h5 class="form-title student-info">Student Information <span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
+                                <form method="POST" enctype="multipart/form-data" >
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-md-2">Nom Category</label>
+                                        <div class="col-md-10">
+                                            <input type="text" name="nom" value="<?= $nom ?>" 
+                                                class="form-control <?= isset($valid['nom']) ? 'is-valid' : '' ?> 
+                                                <?= isset($errors['nom']) ? 'is-invalid' : '' ?> ">
+
+                                                <?php if (isset($errors['nom'])) {  ?>
+                                                    <div class="invalid-feedback"><?= $errors['nom'] ?></div>
+                                                <?php } ?>
                                         </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>First Name <span class="login-danger">*</span></label>
-                                                <input class="form-control" type="text" placeholder="Enter First Name">
-                                            </div>
+                                    </div>
+                                    
+
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-md-2">Photo Category</label>
+                                        <div class="col-md-10">
+                                            <input type="file" 
+                                                class="form-control <?= isset($errors['image']) ? 'is-invalid' : '' ?>
+                                                <?= isset($valid['image']) ? 'is-valid' : '' ?>" 
+                                                name="image">
+                                                <?php if (isset($errors['image'])) {  ?>
+                                                    <div class="invalid-feedback"><?= $errors['image'] ?></div>
+                                                <?php } ?>
                                         </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Last Name <span class="login-danger">*</span></label>
-                                                <input class="form-control" type="text" placeholder="Enter First Name">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Gender <span class="login-danger">*</span></label>
-                                                <select class="form-control select">
-                                                    <option>Select Gender</option>
-                                                    <option>Female</option>
-                                                    <option>Male</option>
-                                                    <option>Others</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms calendar-icon">
-                                                <label>Date Of Birth <span class="login-danger">*</span></label>
-                                                <input class="form-control datetimepicker" type="text" placeholder="DD-MM-YYYY">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Roll </label>
-                                                <input class="form-control" type="text" placeholder="Enter Roll Number">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Blood Group <span class="login-danger">*</span></label>
-                                                <select class="form-control select">
-                                                    <option>Please Select Group </option>
-                                                    <option>B+</option>
-                                                    <option>A+</option>
-                                                    <option>O+</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Religion <span class="login-danger">*</span></label>
-                                                <select class="form-control select">
-                                                    <option>Please Select Religion </option>
-                                                    <option>Hindu</option>
-                                                    <option>Christian</option>
-                                                    <option>Others</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>E-Mail <span class="login-danger">*</span></label>
-                                                <input class="form-control" type="text" placeholder="Enter Email Address">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Class <span class="login-danger">*</span></label>
-                                                <select class="form-control select">
-                                                    <option>Please Select Class </option>
-                                                    <option>12</option>
-                                                    <option>11</option>
-                                                    <option>10</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Section <span class="login-danger">*</span></label>
-                                                <select class="form-control select">
-                                                    <option>Please Select Section </option>
-                                                    <option>B</option>
-                                                    <option>A</option>
-                                                    <option>C</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Admission ID </label>
-                                                <input class="form-control" type="text" placeholder="Enter Admission ID">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Phone </label>
-                                                <input class="form-control" type="text" placeholder="Enter Phone Number">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group Category-up-files">
-                                                <label>Upload Student Photo (150px X 150px)</label>
-                                                <div class="uplod">
-                                                    <label class="file-upload image-upbtn mb-0">
-                                                        Choose File <input type="file">
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="student-submit">
-                                                <button type="submit" class="btn btn-primary">Submit</button>
-                                            </div>
+                                    </div>
+                                    
+                                    <div class="form-group mb-0 row">
+                                        <div class="col-md-10">
+                                            <button name="Ajouter" class="btn btn-primary" type="submit">Ajouter</button>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>
         </div>
 
     </div>
-    <?php
-    include 'layout/footer.php';
-?>
+
+    <script>
+
+    </script>
+    <script src="assets/js/jquery-3.6.0.min.js"></script>
+
+    <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <script src="assets/js/feather.min.js"></script>
+
+    <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <script src="assets/plugins/select2/js/select2.min.js"></script>
+
+    <script src="assets/plugins/moment/moment.min.js"></script>
+    <script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script src="assets/js/script.js"></script>
+
+</body>
+
+</html>

@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 
 use app\Controllers\MachineController;
 
@@ -10,7 +10,7 @@ if(!isset($_POST['category_id'])) {
 }
 
 
-$machines = new MachineController ;
+$machines = new MachineController($_POST) ;
 
 $machines = $machines->getMachineParCategory($_POST['category_id']);
 
@@ -120,7 +120,8 @@ include 'layout/header.php';
                         <li>
                             <div class="featured-car-card">
                                 <figure class="card-banner">
-                                    <img src="<?= $machine->image1 ?>" alt="Toyota RAV4 2021" loading="lazy" width="440" height="300" class="w-100" />
+                                    <img src="../../../public/images/<?= $machine->image1 ?>" alt="Toyota RAV4 2021" 
+                                    loading="lazy" width="440" height="300" class="w-100" />
                                 </figure>
 
                                 <div class="card-content">
@@ -153,7 +154,7 @@ include 'layout/header.php';
                                             <ion-icon name="speedometer-outline"></ion-icon>
 
                                             <span class="card-item-text">
-                                            <?= $machine->type_alimentation ?>
+                                            <?= $machine->capacité_levage ?>
                                             </span>
                                         </li>
 
@@ -167,9 +168,9 @@ include 'layout/header.php';
                                     </ul>
 
                                     <div class="card-price-wrapper">
-                                        <p class="card-price"><b>$440</b> / Jour</p>
-                                        <p class="card-price"><b>$440</b> / Semaine</p>
-                                        <p class="card-price"><b>$440</b> / Mois</p>
+                                        <p class="card-price"><b><?= $machine->prix_jour ?> Dh</b> / Jour</p>
+                                        <p class="card-price"><b><?= $machine->prix_semaine ?> Dh</b> / Semaine</p>
+                                        <p class="card-price"><b><?= $machine->prix_mois ?> Dh</b> / Mois</p>
 
                                         <button class="btn fav-btn" aria-label="Add to favourite list">
                                             <ion-icon name="heart-outline"></ion-icon>

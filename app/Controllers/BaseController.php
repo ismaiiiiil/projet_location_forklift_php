@@ -5,7 +5,7 @@ namespace app\Controllers;
 class BaseController 
 {
     static function redirect($name) { // sans data
-        header("location: $name.php");
+        header("Location: $name.php");
     }
 
     static function set($type, $message) {

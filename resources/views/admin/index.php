@@ -1,12 +1,15 @@
 
+<?php
+include 'layout/header.php';
+?>
 
+<body>
 
-        <?php
-        include 'layout/header.php';
+    <div class="main-wrapper">
+
+        <?= include('layout/navbar.php') ;
         include 'layout/sidebar.php';
         ?>
-
-
 
         <div class="page-wrapper">
             <div class="content container-fluid">

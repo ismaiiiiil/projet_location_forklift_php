@@ -1,8 +1,14 @@
 <?php
-    include 'layout/header.php';
-    include 'layout/sidebar.php';
+include 'layout/header.php';
 ?>
 
+<body>
+
+    <div class="main-wrapper">
+
+        <?= include('layout/navbar.php') ;
+        include 'layout/sidebar.php';
+        ?>
 
         <div class="page-wrapper">
             <div class="content container-fluid">
@@ -238,24 +244,24 @@
             </div>
 
             <footer>
-                <p>Copyright © 2022 Dreamguys.</p>
-            </footer>
+<p>Copyright © 2022 Dreamguys.</p>
+</footer>
 
-        </div>
+</div>
 
-    </div>
+</div>
 
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-    <script src="assets/js/jquery-3.6.0.min.js"></script>
+<script src="assets/js/jquery-3.6.0.min.js"></script>
 
-    <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <script src="assets/js/feather.min.js"></script>
+<script src="assets/js/feather.min.js"></script>
 
-    <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
-    <script src="assets/js/script.js"></script>
+<script src="assets/plugins/datatables/datatables.min.js"></script>
+
+<script src="assets/js/script.js"></script>
 </body>
-
 </html>

@@ -19,6 +19,7 @@ body{
 }
 .img{
     width: 100%;
+    /* hei */
     display: block;
 }
 .img-display{
@@ -34,6 +35,7 @@ body{
 }
 .img-select{
     display: flex;
+    /* height: 400px; */
 }
 .img-item{
     margin: 0.3rem;
