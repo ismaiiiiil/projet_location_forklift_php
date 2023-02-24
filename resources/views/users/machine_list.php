@@ -1,12 +1,11 @@
 <?php
-session_start();
+// session_start();
 
 use app\Controllers\MachineController;
 
-require_once '../../../vendor/autoload.php';
 
 if(!isset($_POST['category_id'])) {
-    header('location:index.php');
+    header('location:home');
 }
 
 
@@ -62,34 +61,12 @@ include 'layout/header.php';
                         </div>
 
                         <div class="input-wrapper">
-                            <label for="input-1" class="input-label">Car, model, or brand</label>
-
-                            <input type="text" name="car-model" id="input-1" class="input-field" placeholder="What car are you looking?">
-                        </div>
-                        <div class="input-wrapper">
-                            <label for="input-1" class="input-label">Car, model, or brand</label>
-
-                            <input type="text" name="car-model" id="input-1" class="input-field" placeholder="What car are you looking?">
-                        </div>
-
-                        <div class="input-wrapper">
-                            <label for="input-1" class="input-label">Car, model, or brand</label>
-
-                            <input type="text" name="car-model" id="input-1" class="input-field" placeholder="What car are you looking?">
-                        </div>
-
-                        <div class="input-wrapper">
                             <label for="input-2" class="input-label">Max. monthly payment</label>
 
                             <input type="text" name="monthly-pay" id="input-2" class="input-field" placeholder="Add an amount in $">
                         </div>
 
-                        <div class="input-wrapper">
-                            <label for="input-3" class="input-label">Make Year</label>
-
-                            <input type="text" name="year" id="input-3" class="input-field" placeholder="Add a minimal make year">
-                        </div>
-
+                        
                         <button type="submit" class="btn">Search</button>
 
                     </form>
@@ -120,8 +97,8 @@ include 'layout/header.php';
                         <li>
                             <div class="featured-car-card">
                                 <figure class="card-banner">
-                                    <img src="../../../public/images/<?= $machine->image1 ?>" alt="Toyota RAV4 2021" 
-                                    loading="lazy" width="440" height="300" class="w-100" />
+                                    <img src="public/images/machine/<?= $machine->image1 ?>" alt="Toyota RAV4 2021" 
+                                    loading="lazy" width="440" height="300" class="w-img-100" />
                                 </figure>
 
                                 <div class="card-content">
@@ -176,7 +153,7 @@ include 'layout/header.php';
                                             <ion-icon name="heart-outline"></ion-icon>
                                         </button>
 
-                                        <button type="button" class="btn" onclick="getMachineDetail(<?= $machine->id ?>)">Rent now</button>
+                                        <button type="button" class="btn" onclick="getMachineDetail(<?= $machine->id_machine ?>)">Rent now</button>
                                     </div>
                                 </div>
                             </div>
@@ -184,7 +161,7 @@ include 'layout/header.php';
                         <?php
                         endforeach;
                         ?>
-                        <form id='form_machine' action="machine_detail.php" method="POST">
+                        <form id='form_machine' action="<?php echo BASE_URL;?>machine_detail" method="POST">
                             <input type="hidden" name="machine_id" id="machine_id">
                         </form>
 

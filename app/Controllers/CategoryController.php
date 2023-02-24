@@ -99,7 +99,7 @@ class CategoryController {
     
     public function uploadPhoto($imagePoste, $oldImage = null)
     {
-        $dir = "./../../../public/images"; // dossier fin timchiw
+        $dir = "./public/images/category"; // dossier fin timchiw
         $time = time(); // heur
         $name = str_replace(' ', '-', strtolower($imagePoste["name"])); // espace => '-'  , name="image" ->"image" 
         $type = $imagePoste["type"]; // png , jpg .. ?
@@ -109,9 +109,19 @@ class CategoryController {
         $name = preg_replace("/\.[^.\s]{3,4}$/", "", $name); // -,/. -> "" vide
         $imageName = $name . '-' . $time . '.' . $ext; // le nom finale image
         if (move_uploaded_file($imagePoste["tmp_name"], $dir . "/" . $imageName)) { // shemain/public/uploads/image-time.png
+            $this->deletePhoto($oldImage);
             return $imageName;
         } //ila mabdlch image tanjibo image l9dima
         return $oldImage;
+    }
+    public function deletePhoto($name = null)
+    {
+        $filename = "public/images/category/$name";
+        if (file_exists($filename)) {
+            unlink($filename);
+            return true;
+        }
+        return false;
     }
     function addCategory() {
         $nom = $this->postData['nom'];
@@ -158,6 +168,10 @@ class CategoryController {
         try {
             if (!empty($id)) {
                 $db = new DB();
+                // delete image 
+                $category = $this->getCategoriesId($id);
+                $this->deletePhoto($category->image);
+
                 $id = $this->test_input($id);
                 $stmt = $db::connection()->prepare("DELETE FROM categories WHERE id = :id");
                 $stmt->execute([":id" => $id]);

@@ -1,0 +1,13 @@
+composer require srmklive/paypal:~1.0
+
+
+______________________
+ --- admin ---
+email : admin@gmail.com
+password : 12345
+ -------------
+
+ --- gerant ----
+ password : prenom_nom_year
+ 
+ 

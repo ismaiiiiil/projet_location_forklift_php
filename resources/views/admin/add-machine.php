@@ -3,7 +3,7 @@
 use app\Controllers\CategoryController;
 use app\Controllers\MachineController;
 
-require_once '../../../vendor/autoload.php';
+// require_once '../../../vendor/autoload.php';
 
 $categories = new CategoryController($_POST);
 $categories->getAllCategories();
@@ -45,7 +45,7 @@ include 'layout/header.php';
 
     <div class="main-wrapper">
 
-        <?= include('layout/navbar.php') ;
+        <?php include('layout/navbar.php') ;
         include 'layout/sidebar.php';
         ?>
 
@@ -58,7 +58,7 @@ include 'layout/header.php';
                             <div class="page-sub-header">
                                 <h3 class="page-title">Machine</h3>
                                 <ul class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="machine.html">Student</a></li>
+                                    <li class="breadcrumb-item"><a href="<?php echo BASE_URL ?>machine.php">Student</a></li>
                                     <li class="breadcrumb-item active">Ajouter une machine</li>
                                 </ul>
                             </div>
@@ -222,20 +222,20 @@ include 'layout/header.php';
     <script>
 
     </script>
-    <script src="assets/js/jquery-3.6.0.min.js"></script>
+    <script src="resources/views/admin/assets/js/jquery-3.6.0.min.js"></script>
 
-    <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <script src="assets/js/feather.min.js"></script>
+    <script src="resources/views/admin/assets/js/feather.min.js"></script>
 
-    <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
-    <script src="assets/plugins/select2/js/select2.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/select2/js/select2.min.js"></script>
 
-    <script src="assets/plugins/moment/moment.min.js"></script>
-    <script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/moment/moment.min.js"></script>
+    <script src="resources/views/admin/assets/js/bootstrap-datetimepicker.min.js"></script>
 
-    <script src="assets/js/script.js"></script>
+    <script src="resources/views/admin/assets/js/script.js"></script>
 
 </body>
 

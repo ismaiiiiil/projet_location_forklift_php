@@ -3,7 +3,6 @@
 use app\Controllers\CategoryController;
 use app\Controllers\MachineController;
 
-require_once '../../../vendor/autoload.php';
 
 $categories = new CategoryController($_POST);
 
@@ -24,7 +23,7 @@ include 'layout/header.php';
 
     <div class="main-wrapper">
 
-        <?= include('layout/navbar.php') ;
+        <?php include('layout/navbar.php') ;
         include 'layout/sidebar.php';
         ?>
         <div class="page-wrapper">
@@ -100,20 +99,20 @@ include 'layout/header.php';
     <script>
 
     </script>
-    <script src="assets/js/jquery-3.6.0.min.js"></script>
+    <script src="resources/views/admin/assets/js/jquery-3.6.0.min.js"></script>
 
-    <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <script src="assets/js/feather.min.js"></script>
+    <script src="resources/views/admin/assets/js/feather.min.js"></script>
 
-    <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
-    <script src="assets/plugins/select2/js/select2.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/select2/js/select2.min.js"></script>
 
-    <script src="assets/plugins/moment/moment.min.js"></script>
-    <script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/moment/moment.min.js"></script>
+    <script src="resources/views/admin/assets/js/bootstrap-datetimepicker.min.js"></script>
 
-    <script src="assets/js/script.js"></script>
+    <script src="resources/views/admin/assets/js/script.js"></script>
 
 </body>
 

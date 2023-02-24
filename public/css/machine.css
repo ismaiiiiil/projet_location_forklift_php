@@ -9,8 +9,52 @@
 body{
     line-height: 1.5;
 } */
+.button-card {
+    display: flex;
+}
+.purchase-info .alert-message {
+    width: 100%;
+    margin-top: 1rem;
+    display:none;
+}
+.alert {
+    padding: 20px;
+    color: white;
+    margin: 10px 0;
+}
+
+.alert-danger {
+    background-color: #f44336;
+}
+
+.alert-info {
+    background-color:#2DCDDF;
+}
+
+.alert-success {
+    background-color: #38E54D;
+}
+.alert-warning {
+    background-color: #FF5B00;
+}
+
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+}
+/* ---------- */
 .card-machine {
-    margin-top: 15rem;
+    margin-top: 8rem;
     margin-bottom: 14rem;
 }
 .card-wrapper{

@@ -3,7 +3,6 @@
 use app\Controllers\CategoryController;
 use app\Controllers\MachineController;
 
-require_once '../../../vendor/autoload.php';
 
 $categories = new CategoryController($_POST);
 
@@ -50,7 +49,7 @@ include 'layout/header.php';
                             <div class="page-sub-header">
                                 <h3 class="page-title">Categories</h3>
                                 <ul class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="category.php">Category</a></li>
+                                    <li class="breadcrumb-item"><a href="<?php echo BASE_URL ?>category">Category</a></li>
                                     <li class="breadcrumb-item active">All Categories</li>
                                 </ul>
                             </div>
@@ -96,7 +95,7 @@ include 'layout/header.php';
                                             <h3 class="page-title">Categories</h3>
                                         </div>
                                         <div class="col-auto text-end float-end ms-auto download-grp">
-                                            <a href="add-category.php" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                            <a href="<?php echo BASE_URL ?>add-category" class="btn btn-primary"><i class="fas fa-plus"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -120,7 +119,7 @@ include 'layout/header.php';
                                                     <td>
                                                         <h2 class="table-avatar">
                                                             <!-- ../../../public/images/ -->
-                                                            <span class="avatar avatar-xxl  me-2"><img class="avatar-img rounded" src="../../../public/images/<?= $categories->t[$i]->getImage() ?>" alt="User Image"></span>
+                                                            <span class="avatar avatar-xxl  me-2"><img class="avatar-img rounded" src="public/images/category/<?= $categories->t[$i]->getImage() ?>" alt="User Image"></span>
                                                         </h2>
                                                     </td>
 
@@ -132,7 +131,7 @@ include 'layout/header.php';
                                                             <a onclick="editCategory(<?= $categories->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light me-2">
                                                                 <i class="feather-edit"></i>
                                                             </a>
-                                                            <form id='form_edit' action="edit-category.php" method="POST">
+                                                            <form id='form_edit' action="<?php echo BASE_URL ?>edit-category" method="POST">
                                                                 <input type="hidden" name="id_edit" id="id_edit">
                                                             </form>
 
@@ -195,17 +194,17 @@ include 'layout/header.php';
     </div>
 
 
-    <script src="assets/js/jquery-3.6.0.min.js"></script>
+    <script src="resources/views/admin/assets/js/jquery-3.6.0.min.js"></script>
 
-    <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <script src="assets/js/feather.min.js"></script>
+    <script src="resources/views/admin/assets/js/feather.min.js"></script>
 
-    <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
-    <script src="assets/plugins/datatables/datatables.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/datatables/datatables.min.js"></script>
 
-    <script src="assets/js/script.js"></script>
+    <script src="resources/views/admin/assets/js/script.js"></script>
 
 
     <script>

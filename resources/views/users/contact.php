@@ -1,4 +1,15 @@
 <?php
+
+use app\Controllers\WebSiteController;
+
+$website = new WebSiteController($_POST);
+
+$web = $website->getInfoWebSite();
+
+if(isset($_POST['Send'])) {
+    $website->contactEntreprise();
+}
+
 include 'layout/header.php';
 ?>
 
@@ -11,8 +22,12 @@ include 'layout/header.php';
     ?>
     <main>
         <article>
+        
             <section  class="contacts_form">
                         <!-- contact form -->
+                        <div class="alert-message">
+          <?php include('layout/alert.php'); ?>
+        </div>
             <div class="container-contact">
                 <div class="content-contact">
                     <div class="left-side">
@@ -20,41 +35,44 @@ include 'layout/header.php';
                         <div class="address details">
                             <i class="fas fa-map-marker-alt"></i>
                             <div class="topic">Address</div>
-                            <div class="text-one">Surkhet, NP12</div>
-                            <div class="text-two">Birendranagar 06</div>
+                            <div class="text-one"><?= $web->localisation ?></div>
+                            <!-- <div class="text-two">Birendranagar 06</div> -->
                         </div>
                         <div class="phone details">
                             <i class="fas fa-phone-alt"></i>
                             <div class="topic">Phone</div>
-                            <div class="text-one">+212 6 94 33 22 79</div>
-                            <div class="text-two">+212 6 94 33 22 79</div>
+                            <div class="text-one"><?= $web->tel1 ?></div>
+                            <div class="text-two"><?= $web->tel1 ?></div>
                         </div>
                         <div class="email details">
                             <i class="fas fa-envelope"></i>
                             <div class="topic">Email</div>
-                            <div class="text-one">rharrafismail@gmail.com</div>
-                            <div class="text-two">rharrafismail@gmail.com</div>
+                            <div class="text-one"><?= $web->adresse1 ?></div>
+                            <div class="text-two"><?= $web->adresse2 ?></div>
                         </div>
                     </div>
                     <div class="right-side">
-                        <div class="topic-text">Send us a message</div>
-                        <p>If you have any work from me or any types of quries related to my tutorial, you can send me message from here. It's my pleasure to help you.</p>
-                        <form action="#">
+                        <div class="topic-text">OBTENIR UN DEVIS</div>
+                        <p>Formulaire de contact</p>
+                        <form method="POST">
                             <div class="input-box">
-                                <input type="text" placeholder="Enter your name">
-                            </div>
-                            <div class="input-box">
-                                <input type="text" placeholder="Enter your email">
+                                <input type="text" name="nom" placeholder="Entrez votre nom">
                             </div>
 
                             <div class="input-box">
-                                <textarea placeholder="Enter your email" rows="5" cols="5"></textarea>
+                                <input type="text" name="email" placeholder="Entrez votre email">
                             </div>
-                            <!-- <div class="input-box message-box">
 
-                            </div> -->
+                            <div class="input-box">
+                                <input type="text" name="numero" placeholder="Entrez votre numéro">
+                            </div>
+
+                            <div class="input-box">
+                                <textarea name="message" placeholder="Entez votre message" rows="5" cols="5"></textarea>
+                            </div>
+                            
                             <div class="button">
-                                <input type="button" value="Send Now">
+                                <input type="submit" class="btn-contact" name="Send" value="Envoyer maintenant">
                             </div>
                         </form>
                     </div>

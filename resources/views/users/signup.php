@@ -1,30 +1,14 @@
 <?php
-session_start();
+// session_start();
 if(isset($_SESSION['login'])) {
-    header('Location: index.php');
+    header('Location: index');
 }
-
-require_once '../../../vendor/autoload.php';
-
 
 
 use app\Controllers\UserController;
 
 $user = new UserController($_POST);
-
-
-include 'layout/header.php';
-
-?>
-
-<body>
-    <!-- 
-    - #HEADER
--->
-
-    <?php
-    include 'layout/navbar.php';
-    $nom = '';$prenom = '';$email = '';$tel = '';$is_entreprise = '';$nom_entreprise = '';$email_entreprise = '';$password = '';$cpassword = '';
+$nom = '';$prenom = '';$email = '';$tel = '';$is_entreprise = '';$nom_entreprise = '';$email_entreprise = '';$password = '';$cpassword = '';
     
     if(isset($_POST['Signup'])) {
         if(isset($_POST['nom'])) $nom = $_POST['nom'];
@@ -37,12 +21,21 @@ include 'layout/header.php';
         if(isset($_POST['password'])) $password = $_POST['password'];
         if(isset($_POST['cpassword'])) $cpassword = $_POST['cpassword'];
 
-
         $user->signup();
         $errors = $user->errors;
     }
 
+include 'layout/header.php';
 
+?>
+
+<body>
+    <!-- 
+    - #HEADER
+-->
+
+    <?php
+    include 'layout/navbar.php';
     ?>
     <main>
         <article class="login_register">
@@ -104,13 +97,19 @@ include 'layout/header.php';
                             
                             <div class="field">
                                 <select name="is_entreprise" id='select_entreprise' onchange="isEntreprise()">
-                                    <option selected disabled value="">Entreprise ou Non</option>
+                                    <option selected value="">Entreprise ou Non</option>
                                     <option 
                                     <?= $is_entreprise === "oui" ? "selected" : "" ?>
                                     value="oui">Oui</option>
                                     <option value="nom">Non</option>
                                 </select>
                             </div>
+                            <div class="my-2">
+                                <p class=" text-danger">
+                                    <?php echo $errors['is_entreprise'] ?? '';  ?>
+                                </p>
+                            </div>
+
                             <span id="is_entreprise" style="display: <?= $is_entreprise === "oui" ? "block" : "none" ?>;">
                                 <div class="field">
                                     <input type="text" name="nom_entreprise" placeholder="Nom Entreprise"  autocomplete="username" >
@@ -162,7 +161,7 @@ include 'layout/header.php';
                                 <input type="submit" name="Signup" value="Signup">
                             </div>
                             <div class="signup-link">
-                                have account? <a href="login.php">login now</a>
+                                have account? <a href="<?php echo BASE_URL ?>login">login now</a>
                             </div>
                         </form>
                     </div>

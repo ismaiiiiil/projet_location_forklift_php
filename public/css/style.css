@@ -228,6 +228,7 @@ button, a { transition: var(--transition); }
 .h3 { font-size: var(--fs-4); }
 
 .w-100 { width: 100%; }
+.w-img-100 { width: 100%; }
 
 
 
@@ -827,7 +828,7 @@ button, a { transition: var(--transition); }
 
 .blog-card .card-banner a:first-child { height: 100%; }
 
-.blog-card .card-banner img {
+.blog-card .card-banner .image-card {
   height: 100%;
   object-fit: cover;
 }
@@ -922,6 +923,9 @@ button, a { transition: var(--transition); }
 
 .footer-top .logo { margin-bottom: 20px; }
 
+.footer .logo img { 
+  border-radius: 50%;
+}
 .footer-text {
   font-size: var(--fs-6);
   line-height: 1.8;
@@ -1139,7 +1143,7 @@ button, a { transition: var(--transition); }
     display: block;
     /* background: url("../images/crack1.png") no-repeat; */
     /* background: url("../images/stage-forklifts.jpg") no-repeat; */
-    background: url("../images/baground1.jpg") no-repeat;
+    background: url("../images/website/baground.jpg") no-repeat;
 
     background-size: cover;
     background-position: left;

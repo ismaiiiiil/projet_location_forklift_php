@@ -15,7 +15,7 @@ class DB {
     static function connection() 
     {
         if( is_null(static::$db)) { // === null
-            static::$db = new PDO('mysql:host=localhost;dbname=forklift_location;charset=utf8', 'root', '');
+            static::$db = new PDO('mysql:host=localhost:3308;dbname=forklift_location;charset=utf8', 'root', '');
             // var_dump('APPEL');
         } 
         // var_dump('APPEL');

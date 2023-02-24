@@ -2,9 +2,6 @@
 
 use app\Controllers\UserController;
 
-require_once '../../../vendor/autoload.php';
-
-
 
 
 $useres = new UserController($_POST);
@@ -54,7 +51,7 @@ include 'layout/header.php';
                             <div class="page-sub-header">
                                 <h3 class="page-title">useres</h3>
                                 <ul class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="user.php">Users</a></li>
+                                    <li class="breadcrumb-item"><a href="<?php echo BASE_URL ?>users">Users</a></li>
                                     <li class="breadcrumb-item active">All useres</li>
                                 </ul>
                             </div>
@@ -128,6 +125,7 @@ include 'layout/header.php';
                                         <thead class="student-thread">
                                             <tr>
                                                 <th>ID</th>
+                                                <th>Profile</th>
                                                 <th>Nom</th>
                                                 <th>Prenom</th>
                                                 <th>Email</th>
@@ -144,6 +142,17 @@ include 'layout/header.php';
                                             ?>
                                                 <tr>
                                                     <td><?= $i + 1 ?></td>
+                                                    <td>
+                                                        <h2 class="table-avatar">
+                                                            <span
+                                                                class="avatar avatar-sm me-2"><img
+                                                                    class="avatar-img rounded-circle"
+                                                                    src="public/images/users/<?= $useres->t[$i]->getUserPhoto() ?>"
+                                                                    alt="User Image">
+                                                                </span>
+                                                            <!-- <a href="teacher-details.html">Aaliyah</a> -->
+                                                        </h2>
+                                                    </td>
                                                 
                                                     <td><?= $useres->t[$i]->getNom() ?></td>
                                                     <td><?= $useres->t[$i]->getPrenom() ?></td>
@@ -222,7 +231,7 @@ include 'layout/header.php';
             </div>
             <!-- Prix Machine -->
             <footer>
-                <p>Copyright © 2022 Dreamguys.</p>
+                <p>Copyright © 2022-<?php echo date("Y");?>.</p>
             </footer>
 
         </div>
@@ -230,17 +239,17 @@ include 'layout/header.php';
     </div>
 
 
-    <script src="assets/js/jquery-3.6.0.min.js"></script>
+    <script src="resources/views/admin/assets/js/jquery-3.6.0.min.js"></script>
 
-    <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <script src="assets/js/feather.min.js"></script>
+    <script src="resources/views/admin/assets/js/feather.min.js"></script>
 
-    <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
-    <script src="assets/plugins/datatables/datatables.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/datatables/datatables.min.js"></script>
 
-    <script src="assets/js/script.js"></script>
+    <script src="resources/views/admin/assets/js/script.js"></script>
 
 
     <script>

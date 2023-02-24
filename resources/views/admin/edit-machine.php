@@ -1,9 +1,8 @@
 <?php
 
+use app\Controllers\BaseController;
 use app\Controllers\CategoryController;
 use app\Controllers\MachineController;
-
-require_once '../../../vendor/autoload.php';
 
 $categories = new CategoryController($_POST);
 $categories->getAllCategories();
@@ -15,7 +14,7 @@ if(isset($_POST['id_edit'])) {
     $machine = $machines->getMachineParId($_POST['id_edit']);
 
 }else{
-    header("location: machine.php");
+    BaseController::redirect('machine');
 }
 
 
@@ -200,7 +199,7 @@ include 'layout/header.php';
                                                 <h2 class="table-avatar">
                                                     <span class="avatar avatar-xxl  me-2">
                                                         <img class="avatar-img rounded" 
-                                                            src="../../../public/images/<?php echo $machine->image1 ?>" alt="User Image">
+                                                            src="public/images/machine/<?php echo $machine->image1 ?>" alt="User Image">
                                                     </span>
                                                 </h2>
                                             </div>
@@ -218,7 +217,7 @@ include 'layout/header.php';
                                                 <h2 class="table-avatar">
                                                     <span class="avatar avatar-xxl  me-2">
                                                         <img class="avatar-img rounded" 
-                                                            src="../../../public/images/<?php echo $machine->image2 ?>" alt="User Image">
+                                                            src="public/images/machine/<?php echo $machine->image2 ?>" alt="User Image">
                                                     </span>
                                                 </h2>
                                             </div>
@@ -236,7 +235,7 @@ include 'layout/header.php';
                                                 <h2 class="table-avatar">
                                                     <span class="avatar avatar-xxl  me-2">
                                                         <img class="avatar-img rounded" 
-                                                            src="../../../public/images/<?php echo $machine->image3 ?>" alt="User Image">
+                                                            src="public/images/machine/<?php echo $machine->image3 ?>" alt="User Image">
                                                     </span>
                                                 </h2>
                                             </div>
@@ -270,20 +269,20 @@ include 'layout/header.php';
     <script>
 
     </script>
-    <script src="assets/js/jquery-3.6.0.min.js"></script>
+    <script src="resources/views/admin/assets/js/jquery-3.6.0.min.js"></script>
 
-    <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <script src="assets/js/feather.min.js"></script>
+    <script src="resources/views/admin/assets/js/feather.min.js"></script>
 
-    <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
-    <script src="assets/plugins/select2/js/select2.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/select2/js/select2.min.js"></script>
 
-    <script src="assets/plugins/moment/moment.min.js"></script>
-    <script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/moment/moment.min.js"></script>
+    <script src="resources/views/admin/assets/js/bootstrap-datetimepicker.min.js"></script>
 
-    <script src="assets/js/script.js"></script>
+    <script src="resources/views/admin/assets/js/script.js"></script>
 
 </body>
 

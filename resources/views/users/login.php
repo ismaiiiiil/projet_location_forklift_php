@@ -1,38 +1,20 @@
 <?php
-session_start();
-// 
+
 if(isset($_SESSION['login'])) {
-    header('Location: index.php');
+    header('Location: home');
 }
-
-
-require_once '../../../vendor/autoload.php';
-
-
 
 use app\Controllers\UserController;
 
 $user = new UserController($_POST);
 
 if(isset($_POST['Login'])) {
+
     $user->login();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 include 'layout/header.php';
+
 ?>
 
 <body>
@@ -58,18 +40,25 @@ include 'layout/header.php';
                     <div class="form-inner">
                         <form action="#" method="POST" class="login">
                             <div class="field">
-                                <input type="text" name="login" placeholder="Email ou name" >
+                                <input type="email" 
+                                name="email"
+                                autocomplete="email"
+                                placeholder="Email " >
                             </div>
-                            <div class="field">
-                                <input type="password" name="password" placeholder="Password" >
+                            <div class="field field-password">
+                                <input type="password"
+                                name="password" autocomplete="new-password" placeholder="Password" >
+                                <i class="bx bx-hide show-hide"></i>
                             </div>
-                    
+                            <div class="pass-link">
+                                <a href="<?php echo BASE_URL ?>forgot-password">Mot de passe oublié?</a>
+                            </div>
                             <div class="field btn">
                                 <div class="btn-layer"></div>
                                 <input type="submit" value="Login" name="Login">
                             </div>
                             <div class="signup-link">
-                                Not a member? <a href="signup.php">Signup now</a>
+                                Not a member? <a href="<?php echo BASE_URL ?>signup">Signup now</a>
                             </div>
                         </form>
                     </div>

@@ -29,13 +29,44 @@ class MachineController
         return $data;
     }
 
+    // generate Price machine choisie
+    function generatePrice() 
+    {
+        $premier_date = $this->test_input($this->postData["premier_date"]);
+        $deuxieme_date = $this->test_input($this->postData["deuxieme_date"]);
+        $machine_id = $this->test_input($this->postData["machine_id"]);
+
+        
+
+        $datetime1 = strtotime($premier_date);
+        $datetime2 = strtotime($deuxieme_date);
+
+        if(( $datetime1 - strtotime(date('Y-m-d')) ) < 0) {
+            BaseController::set('error', "La date premier est inférieure à la date aujourd'hui");
+            $array = [ 'machine_id' => $machine_id];
+            header("location: machine_detail.php?machine_id=" . $machine_id."&&machineinfo=".$array ."");
+            // return json_encode($array);
+        }else{
+            // header("location: machine_detail.php?machine_id=" . $machine_id);
+            BaseController::set('error', "La date premier est inférieure à la date aujourd'hui");
+            $array = [ 'machine_id' => $machine_id];
+            header("location: machine_detail.php?machine_id=" . $machine_id."&&machineinfo=".$array ."");
+        }
+        $secs = $datetime2 - $datetime1;// == <seconds between the two times>
+        $days = $secs / 86400;
+        
+        
+        // echo $days;
+    }
+
+
     public function getMachineParCategory($id)
     {
         $db = new DB();
-        $sql = 'SELECT * FROM machines
+        $sql = 'SELECT *, machines.id id_machine FROM machines
         JOIN image_machines on machines.id_image = image_machines.id
         JOIN prix_machines on prix_machines.id = machines.id_prix
-                WHERE id_category =?';
+                WHERE id_category =? AND quantity > 0';
 
         $result = $db::connection()->prepare($sql);
         $result->execute([$id]);
@@ -51,20 +82,35 @@ class MachineController
         $result->execute();
         return $result->fetchAll(PDO::FETCH_OBJ);
     }
+    function getAllMachinObj() {
+        $db = new DB();
+        $sql = 'SELECT *, machines.id id_machine FROM machines
+        JOIN image_machines on machines.id_image = image_machines.id
+        JOIN prix_machines on prix_machines.id = machines.id_prix';
+
+        $result = $db::connection()->query($sql);
+        $result->execute();
+        return $result->fetchAll(PDO::FETCH_OBJ);
+    }
 
 
     function getMachineParId($id)
     {
         try {
+            // $id = $this->test_input($id);
             $db = new DB();
-            $sql = 'SELECT * FROM machines
+            $sql = 'SELECT *, machines.id id_machine FROM machines
             JOIN image_machines on machines.id_image = image_machines.id
             JOIN prix_machines on prix_machines.id = machines.id_prix
                     WHERE machines.id =?';
 
             $result = $db::connection()->prepare($sql);
             $result->execute([$id]);
-            return current($result->fetchAll(PDO::FETCH_OBJ));
+            // if($result->rowCount() > 0) {
+                return current($result->fetchAll(PDO::FETCH_OBJ));
+            // } else {
+            //     BaseController::redirect('home');
+            // }
         } catch (PDOException $e) {
             echo "ERROR: " . $e->getMessage();
         }
@@ -154,7 +200,7 @@ class MachineController
 
     public function uploadPhoto($imagePoste, $oldImage = null)
     {
-        $dir = "./../../../public/images"; // dossier fin timchiw
+        $dir = "public/images/machine"; // dossier fin timchiw
         $time = time(); // heur
         $name = str_replace(' ', '-', strtolower($imagePoste["name"])); // espace => '-'  , name="image" ->"image" 
         $type = $imagePoste["type"]; // png , jpg .. ?
@@ -164,6 +210,7 @@ class MachineController
         $name = preg_replace("/\.[^.\s]{3,4}$/", "", $name); // -,/. -> "" vide
         $imageName = $name . '-' . $time . '.' . $ext; // le nom finale image
         if (move_uploaded_file($imagePoste["tmp_name"], $dir . "/" . $imageName)) { // shemain/public/uploads/image-time.png
+            $this->deletePhoto($oldImage);
             return $imageName;
         } //ila mabdlch image tanjibo image l9dima
         return $oldImage;
@@ -171,7 +218,7 @@ class MachineController
 
     public function deletePhoto($name = null)
     {
-        $filename = " ../../../public/images/$name";
+        $filename = "public/images/machine/$name";
         if (file_exists($filename)) {
             unlink($filename);
             return true;
@@ -351,6 +398,12 @@ class MachineController
     {
         try {
             if (!empty($id)) {
+                // delete image 
+                $machine = $this->getMachineParId($id);
+                $this->deletePhoto($machine->image1);
+                $this->deletePhoto($machine->image2);
+                $this->deletePhoto($machine->image3);
+
                 $db = new DB();
                 $id = $this->test_input($id);
                 $stmt = $db::connection()->prepare("DELETE FROM machines WHERE id = :id");

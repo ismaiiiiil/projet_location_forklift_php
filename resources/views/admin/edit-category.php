@@ -1,9 +1,9 @@
 <?php
 
+use app\Controllers\BaseController;
 use app\Controllers\CategoryController;
 use app\Controllers\MachineController;
 
-require_once '../../../vendor/autoload.php';
 
 $categories = new CategoryController($_POST);
 $id = "";
@@ -12,7 +12,7 @@ if(isset($_POST['id_edit'])) {
     $category = $categories->getCategoriesId($_POST['id_edit']);
 }
 else{
-    header("location: category.php");
+    BaseController::redirect('category');
 }
 
 $nom = '';
@@ -21,7 +21,7 @@ if (isset($_POST['Modifier'])) {
     $categories->updateCategory();
     $errors = $categories->errors;
     $valid = $categories->valid;
-    var_dump($_POST);
+    // var_dump($_POST);
 }
 
 include 'layout/header.php';
@@ -31,7 +31,7 @@ include 'layout/header.php';
 
     <div class="main-wrapper">
 
-        <?= include('layout/navbar.php') ;
+        <?php include('layout/navbar.php') ;
         include 'layout/sidebar.php';
         ?>
 
@@ -44,7 +44,7 @@ include 'layout/header.php';
                             <div class="page-sub-header">
                                 <h3 class="page-title">Category</h3>
                                 <ul class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="category.php">Category</a></li>
+                                    <li class="breadcrumb-item"><a href="<?php echo BASE_URL ?>category">Category</a></li>
                                     <li class="breadcrumb-item active">Modifier category <?= $category->nom ?></li>
                                 </ul>
                             </div>
@@ -84,7 +84,7 @@ include 'layout/header.php';
                                         <h2 class="table-avatar ">
                                             <span class="avatar avatar-xxl  me-2 ">
                                                 <img class="avatar-img rounded" 
-                                                    src="../../../public/images/<?= $category->image ?>" 
+                                                    src="public/images/category/<?= $category->image ?>" 
                                                     alt="Category Image">
                                             </span>
                                         </h2>
@@ -122,20 +122,20 @@ include 'layout/header.php';
     <script>
 
     </script>
-    <script src="assets/js/jquery-3.6.0.min.js"></script>
+    <script src="resources/views/admin/assets/js/jquery-3.6.0.min.js"></script>
 
-    <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <script src="assets/js/feather.min.js"></script>
+    <script src="resources/views/admin/assets/js/feather.min.js"></script>
 
-    <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
-    <script src="assets/plugins/select2/js/select2.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/select2/js/select2.min.js"></script>
 
-    <script src="assets/plugins/moment/moment.min.js"></script>
-    <script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="resources/views/admin/assets/plugins/moment/moment.min.js"></script>
+    <script src="resources/views/admin/assets/js/bootstrap-datetimepicker.min.js"></script>
 
-    <script src="assets/js/script.js"></script>
+    <script src="resources/views/admin/assets/js/script.js"></script>
 
 </body>
 

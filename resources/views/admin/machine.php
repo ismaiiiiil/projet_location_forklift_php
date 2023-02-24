@@ -3,7 +3,6 @@
 use app\Controllers\CategoryController;
 use app\Controllers\MachineController;
 
-require_once '../../../vendor/autoload.php';
 
 $categories = new CategoryController($_POST);
 $categories->getAllCategories();
@@ -38,7 +37,7 @@ include 'layout/header.php';
 
     <div class="main-wrapper">
 
-        <?= include('layout/navbar.php') ;
+        <?php include('layout/navbar.php') ;
         include 'layout/sidebar.php';
         ?>
         
@@ -52,7 +51,7 @@ include 'layout/header.php';
                             <div class="page-sub-header">
                                 <h3 class="page-title">Machines</h3>
                                 <ul class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="machine.html">Machine</a></li>
+                                    <li class="breadcrumb-item"><a href="<?php echo BASE_URL ?>machine">Machine</a></li>
                                     <li class="breadcrumb-item active">All Machines</li>
                                 </ul>
                             </div>
@@ -103,7 +102,7 @@ include 'layout/header.php';
                                             <h3 class="page-title">Machines</h3>
                                         </div>
                                         <div class="col-auto text-end float-end ms-auto download-grp">
-                                            <a href="add-machine.php" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                            <a href="<?php echo BASE_URL ?>add-machine" class="btn btn-primary"><i class="fas fa-plus"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -137,20 +136,20 @@ include 'layout/header.php';
                                                     <td><?= $i + 1 ?></td>
                                                     <td>
                                                         <h2 class="table-avatar">
-                                                            <!-- ../../../public/images/ -->
-                                                            <span class="avatar avatar-xxl  me-2"><img class="avatar-img rounded" src="../../../public/images/<?= $machines->t[$i]->getImage1() ?>" alt="User Image"></span>
+                                                            <!-- public/images/ -->
+                                                            <span class="avatar avatar-xxl  me-2"><img class="avatar-img rounded" src="public/images/machine/<?= $machines->t[$i]->getImage1() ?>" alt="User Image"></span>
                                                         </h2>
                                                     </td>
 
                                                     <td>
                                                         <h2 class="table-avatar">
-                                                            <span class="avatar avatar-xxl  me-2"><img class="avatar-img rounded" src="../../../public/images/<?= $machines->t[$i]->getImage2() ?>" alt="User Image"></span>
+                                                            <span class="avatar avatar-xxl  me-2"><img class="avatar-img rounded" src="public/images/machine/<?= $machines->t[$i]->getImage2() ?>" alt="User Image"></span>
                                                         </h2>
                                                     </td>
 
                                                     <td>
                                                         <h2 class="table-avatar">
-                                                            <span class="avatar avatar-xxl  me-2"><img class="avatar-img rounded" src="../../../public/images/<?= $machines->t[$i]->getImage3() ?>" alt="User Image"></span>
+                                                            <span class="avatar avatar-xxl  me-2"><img class="avatar-img rounded" src="public/images/machine/<?= $machines->t[$i]->getImage3() ?>" alt="User Image"></span>
                                                         </h2>
                                                     </td>
                                                     <td><?= substr($machines->t[$i]->getNom(), 0, 5) ?></td>
@@ -176,7 +175,7 @@ include 'layout/header.php';
                                                             <a onclick="editMachine(<?= $machines->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light me-2">
                                                                 <i class="feather-edit"></i>
                                                             </a>
-                                                            <form id='form_edit' action="edit-machine.php" method="POST">
+                                                            <form id='form_edit' action="<?php echo BASE_URL ?>edit-machine" method="POST">
                                                                 <input type="hidden" name="id_edit" id="id_edit">
                                                             </form>
 
@@ -240,17 +239,18 @@ include 'layout/header.php';
     </div>
 
 
-    <script src="assets/js/jquery-3.6.0.min.js"></script>
+   
+<script src="resources/views/admin/assets/js/jquery-3.6.0.min.js"></script>
 
-    <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="resources/views/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <script src="assets/js/feather.min.js"></script>
+<script src="resources/views/admin/assets/js/feather.min.js"></script>
 
-    <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="resources/views/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
-    <script src="assets/plugins/datatables/datatables.min.js"></script>
+<script src="resources/views/admin/assets/plugins/datatables/datatables.min.js"></script>
 
-    <script src="assets/js/script.js"></script>
+<script src="resources/views/admin/assets/js/script.js"></script>
 
 
     <script>

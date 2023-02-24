@@ -11,11 +11,14 @@ class User {
     private $is_entreprise;
     private $nom_entreprise;
     private $email_entreprise;
+    private $user_photo;
+    private $code;
     private $password;
 
     function __construct($id, $email, $nom, $prenom,
                         $tel, $is_entreprise, $nom_entreprise,
-                        $email_entreprise,$password)
+                        $email_entreprise, $user_photo,
+                        $code, $password)
     {
         $this->id = $id;
         $this->email = $email;
@@ -25,6 +28,8 @@ class User {
         $this->is_entreprise = $is_entreprise;
         $this->nom_entreprise = $nom_entreprise;
         $this->email_entreprise = $email_entreprise;
+        $this->user_photo = $user_photo;
+        $this->code = $code;
         $this->password = $password;
     }
 
@@ -82,6 +87,23 @@ class User {
     function setEmailEntreprise($email_entreprise) {
         $this->email_entreprise = $email_entreprise;
     }
+
+
+    function getUserPhoto() {
+        return $this->user_photo;
+    }
+    function setUserPhoto($user_photo) {
+        $this->user_photo = $user_photo;
+    }
+
+    function getCode() {
+        return $this->code;
+    }
+    function setCode($code) {
+        $this->code = $code;
+    }
+
+
     function getPassword() {
         return $this->password;
     }
