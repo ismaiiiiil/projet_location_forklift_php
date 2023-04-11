@@ -6,30 +6,26 @@ use app\Controllers\AdminController;
 
 $manager = new AdminController($_POST);
 
+$managerSelect = $manager->getAllManagementSelect();
+
+$search_name = "";
+
+if (isset($_POST["Search"])) {
+    $search_name = isset($_POST["search_name"]) ? $_POST["search_name"] : "";
+
+    if ($search_name === "all") {
+        $manager->getAllManagement();
+    } else {
+        $manager->getAllmanagerByName($search_name);
+    }
+} else {
+    $manager->getAllManagement();
+}
 
 
-$manager->getAllManagement();
-
-// $search_name = "";
-// $search_entreprise="";
-
-// if (isset($_POST["Search"])) {
-//     $search_name = isset($_POST["search_name"]) ? $_POST["search_name"] : "";
-//     $search_entreprise = isset($_POST['search_entreprise']) ? $_POST['search_entreprise'] : "";
-
-//     if ($search_name === "all") {
-//         $manager->getAllUser();
-//     } else {
-//         $manager->getAllmanagerByNameEntreprise($search_name, $search_entreprise);
-//     }
-// } else {
-//     $manager->getAllUser();
-// }
-
-
-// if (isset($_POST['id_delete'])) {
-//     $manager->deleteUser($_POST['id_delete']);
-// }
+if (isset($_POST['id_delete'])) {
+    $manager->deleteManager($_POST['id_delete']);
+}
 include 'layout/header.php';
 ?>
 
@@ -64,14 +60,16 @@ include 'layout/header.php';
                         <div class="col-lg-3 col-md-6">
                             <div class="form-group">
                                 <select class="form-control " name="search_name">
-                                    <option disabled selected>Search by Name user...</option>
+                                    <option disabled selected value="all">Search by Name user...</option>
                                     <option value="all">Select all users </option>
-                                    
+                                    <?php foreach($managerSelect as $m ): ?>
+                                        <option value="<?= $m->nom ?>">
+                                            <?= $m->nom ?>
+                                        </option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
-
-                    
 
                         <div class="col-lg-2">
                             <div class="search-student-btn">
@@ -107,8 +105,9 @@ include 'layout/header.php';
                                                 <th>Nom</th>
                                                 <th>Prenom</th>
                                                 <th>Email</th>
+                                                <th>Roles</th>
                                                 <th>Tel</th>
-                                                <th class="text-end">Action</th>
+                                                <th class="text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -128,20 +127,38 @@ include 'layout/header.php';
                                                             <!-- <a href="teacher-details.html">Aaliyah</a> -->
                                                         </h2>
                                                     </td>
-                                                
+
                                                     <td><?= $manager->t[$i]->getNom() ?></td>
                                                     <td><?= $manager->t[$i]->getPrenom() ?></td>
                                                     <td><?= $manager->t[$i]->getEmail() ?></td>
                                                     <td><?= $manager->t[$i]->getTel() ?></td>
+                                                    <?php
+                                                        $roles = $manager->getAllRolesById($manager->t[$i]->getId())
+                                                    ?>
+                                                    <td>
+                                                        <?php foreach($roles as $role):
+                                                        echo " <span class='badge badge-outline-primary '>
+                                                                    <span class=''>".
+                                                                        $role .
+                                                                    "</span>
+                                                                </span>
+                                                            <br/>";
+                                                        endforeach; ?>
+                                                    </td>
 
                                                     <td class="text-end">
                                                         <div class="actions ">
-                                
+                                                            <form id="form_edit" action="<?= BASE_URL ?>edit-manager" method="post">
+                                                                <input type="hidden" id="id_edit" name="id_edit">
+                                                            </form>
+                                                            <!-- edit -->
+                                                            <a onclick="editManager(<?= $manager->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light me-2">
+                                                                <i class="feather-edit"></i>
+                                                            </a>
                                                             <!-- model  Delete-->
-                                                            <a type="button" onclick="deleteUser(<?= $manager->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light" data-bs-toggle="modal" data-bs-target="#model-delete">
+                                                            <a type="button" onclick="deleteManager(<?= $manager->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light" data-bs-toggle="modal" data-bs-target="#model-delete">
                                                                 <i class="fa-solid fa-trash-can"></i>
                                                             </a>
-
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -150,7 +167,7 @@ include 'layout/header.php';
                                             ?>
                                         </tbody>
                                     </table>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -210,10 +227,17 @@ include 'layout/header.php';
 
 
     <script>
-        function deleteUser($id) {
+        function editManager(id) {
+            var form = document.getElementById('form_edit');
+            var input = document.getElementById('id_edit');
+            input.value = id;
+            form.submit();
+
+        }
+        function deleteManager(id) {
             var form = document.getElementById('form_delete');
             var input = document.getElementById('id_delete');
-            input.value = $id;
+            input.value = id;
         }
         function submitFormDetete() {
             var form = document.getElementById('form_delete');

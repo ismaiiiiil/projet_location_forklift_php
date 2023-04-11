@@ -60,7 +60,7 @@ include 'layout/header.php';
                     <form method="POST" class="row">
                         <div class="col-lg-3 col-md-6">
                             <div class="form-group">
-                                <input class="form-control " 
+                                <input class="form-control "
                                 value="<?= $search_date ?>"
                                 type="date" name="search_date" />
                             </div>
@@ -81,7 +81,7 @@ include 'layout/header.php';
                                 >Annuler</button>
                             </div>
                         </div>
-                        <?php 
+                        <?php
                             }
                         ?>
                     </form>
@@ -110,7 +110,11 @@ include 'layout/header.php';
                                                 <th>Total perte</th>
                                                 <th>Prix hors taxe</th>
                                                 <th>date de bénéfices</th>
-                                                <th class="text-end">Action</th>
+                                                <?php if(isset($_SESSION["admin"])){ ?>
+                                                    <th class="text-end">Action</th>
+                                                <?php }elseif(!!$roles->delete_benefice && isset($_SESSION["manager"])){ ?>
+                                                    <th class="text-end">Action</th>
+                                                <?php } ?>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -118,7 +122,7 @@ include 'layout/header.php';
                                             for ($i = 0; $i < count($benefice->t); $i++) {
                                             ?>
                                                 <tr>
-                                                    <td><?= $i + 1 ?></td>                                                
+                                                    <td><?= $i + 1 ?></td>
                                                     <td>
                                                         <span class="badge badge-outline-primary py-2 px-3">
                                                             <span class="fs-6">
@@ -144,23 +148,35 @@ include 'layout/header.php';
 
                                                     <td><?= $benefice->t[$i]->getDateBénéfices() ?></td>
 
-
-                                                    <td class="text-end">
+                                                    <?php if(isset($_SESSION["admin"])){ ?>
+                                                        <td class="text-end">
                                                         <div class="actions ">
                                                             <!-- model  Delete-->
-                                                            <a type="button" onclick="deletePerteMateriel(<?= $benefice->t[$i]->getId() ?>)" 
+                                                            <a type="button" onclick="deletePerteMateriel(<?= $benefice->t[$i]->getId() ?>)"
                                                                 class="btn btn-sm bg-danger-light" data-bs-toggle="modal" data-bs-target="#model-delete">
                                                                 <i class="fa-solid fa-trash-can"></i>
                                                             </a>
                                                         </div>
                                                     </td>
+                                                    <?php }elseif(!!$roles->delete_benefice && isset($_SESSION["manager"])){ ?>
+                                                        <td class="text-end">
+                                                        <div class="actions ">
+                                                            <!-- model  Delete-->
+                                                            <a type="button" onclick="deletePerteMateriel(<?= $benefice->t[$i]->getId() ?>)"
+                                                                class="btn btn-sm bg-danger-light" data-bs-toggle="modal" data-bs-target="#model-delete">
+                                                                <i class="fa-solid fa-trash-can"></i>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                    <?php } ?>
+
                                                 </tr>
                                             <?php
                                             }
                                             ?>
                                         </tbody>
                                     </table>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -230,7 +246,7 @@ include 'layout/header.php';
             form.submit();
         }
 
-    
+
     </script>
 </body>
 

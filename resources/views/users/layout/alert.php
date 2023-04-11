@@ -3,75 +3,60 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        .alert {
-            padding: 20px;
-            color: white;
-            margin: 10px 0;
-        }
-
-        .alert-danger {
-            background-color: #f44336;
-        }
-
-        .alert-info {
-            background-color:#2DCDDF;
-        }
-
-        .alert-success {
-            background-color: #38E54D;
-        }
-        .alert-warning {
-            background-color: #FF5B00;
-        }
-
-        .closebtn {
-            margin-left: 15px;
-            color: white;
-            font-weight: bold;
-            float: right;
-            font-size: 22px;
-            line-height: 20px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .closebtn:hover {
-            color: black;
-        }
-    </style>
+    <link rel="stylesheet" href="public/css/toast.css">
 </head>
 
 <body>
 
     <?php if(isset($_COOKIE['success'])){ ?>
-        <div class="alert alert-success">
-            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-            <?= $_COOKIE['success']  ?>
-        </div>
+        <li class="toast success">
+            <div class="column">
+                <i class="fa-solid fa-circle-check"></i>
+                <span><?= $_COOKIE['success']  ?></span>
+            </div>
+            <i class="fa-solid fa-xmark" onclick="removeToast(this.parentElement)"></i>
+        </li>
     <?php } ?>
 
     <?php if(isset($_COOKIE['error'])){ ?>
-        <div class="alert alert-danger">
-            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-            <?= $_COOKIE['error']  ?>
-        </div>
+        <li class="toast error">
+            <div class="column">
+                <i class="fa-solid fa-circle-xmark"></i>
+                <span><?= $_COOKIE['error']  ?></span>
+            </div>
+            <i class="fa-solid fa-xmark" onclick="removeToast(this.parentElement)"></i>
+        </li>
     <?php } ?>
 
     <?php if(isset($_COOKIE['warning'])){ ?>
-        <div class="alert alert-warning">
-            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-            <?= $_COOKIE['warning']  ?>
-        </div>
+        <li class="toast warning">
+            <div class="column">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span><?= $_COOKIE['warning']  ?></span>
+            </div>
+            <i class="fa-solid fa-xmark" onclick="removeToast(this.parentElement)"></i>
+        </li>
     <?php } ?>
 
     <?php if(isset($_COOKIE['info'])){ ?>
-        <div class="alert alert-info">
-            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-            <?= $_COOKIE['info']  ?>
-        </div>
+        <li class="toast info">
+            <div class="column">
+                <i class="fa-solid fa-circle-info"></i>
+                <span><?= $_COOKIE['info']  ?></span>
+            </div>
+            <i class="fa-solid fa-xmark" onclick="removeToast(this.parentElement)"></i>
+        </li>
     <?php } ?>
 
+    <script>
+        const removeToast = (toast) => {
+            toast.classList.add("hide");
+            if (toast.timeoutId) clearTimeout(toast.timeoutId); // Clearing the timeout for the toast
+            setTimeout(() => toast.remove(), 500); // Removing the toast after 500ms
+        };
+        const toast = document.querySelector(".toast"); // Creating a new 'li' element for the toast
+        toast.timeoutId = setTimeout(() => removeToast(toast), 5000);
+    </script>
 </body>
 
 </html>

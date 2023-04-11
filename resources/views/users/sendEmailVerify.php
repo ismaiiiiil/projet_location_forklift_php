@@ -70,7 +70,10 @@
                         <tbody>
                             <tr>
                                 <td style="text-align: center; padding-bottom:25px">
-                                    <a href="#"><img style="height: 40px" src="../../../public/images/website/{SITE_LOGO}" alt="logo"></a>
+                                <!-- https://cdn.pixabay.com/photo/2016/06/22/08/40/atom-1472657__340.png -->
+                                    <!-- <a href="#"><img style="height: 40px" src="https://cdn.pixabay.com/photo/2016/06/22/08/40/atom-1472657__340.png" alt="logo"></a> -->
+
+                                    <a href=""><img style="height: 40px" src="https://i.ibb.co/7WVwZtD/logoSite.png" alt="logoSite" border="0" /></a>
                                     <h2 style="font-size: 14px; color: #6576ff; padding-top: 12px;">{SITE_NAME}</h2>
                                 </td>
                             </tr>

@@ -39,7 +39,9 @@ include 'layout/header.php';
     ?>
     <main>
         <article class="login_register">
-            <?php include('layout/alert.php'); ?>
+            <ul class="notifications" >
+                <?php include('layout/alert.php'); ?>
+            </ul>
             <div class="wrapper">
                 <div class="title-text">
                     <div class="title signup">

@@ -1,81 +1,89 @@
 <?php
+
 use app\Controllers\CategoryController;
+use app\Controllers\FeedbackController;
+
+$category = new CategoryController($_POST);
 
 
-
-$category = new CategoryController($_POST) ;
-
-
-if(isset($_POST['searchCategory']) && !empty(['searchCategory'])) {
+if (isset($_POST['searchCategory']) && !empty(['searchCategory'])) {
   $category->getAllCategoriesByName($_POST['searchCategory']);
-}else {
+} else {
   $category->getAllCategories();
 }
 
+$feedback = new FeedbackController($_POST);
+
+$description ="";
+if (isset($_POST["add-feedback"])) {
+  $description = isset($_POST["description"]) ? $_POST["description"] : "";
+  $feedback->addFeedback();
+}
+
+$feedbackList = $feedback->getAllFeedbackActive();
+
 include 'layout/header.php';
 ?>
+
 <body>
- 
+
 
   <!-- 
     - #HEADER
   -->
 
 
-  <?php 
-    include 'layout/navbar.php';
+  <?php
+  include 'layout/navbar.php';
   ?>
 
   <main>
-    <article >
+    <article>
 
       <!-- 
         - #HERO
       -->
 
-    <!-- 
+      <!-- 
         - #HERO FIlter 
     -->
 
-    <section class="section hero" id="home">
-                <div class="container">
-                    <div class="hero-content">
-                        <h2 class="h1 hero-title">Engiloc Entreprise De Location Forklift </h2>
+      <section class="section hero" id="home">
+        <div class="container">
+          <div class="hero-content">
+            <h2 class="h1 hero-title">Engiloc Entreprise De Location Forklift </h2>
 
-                        <p class="hero-text">
-                        Vivre au Maroc!
-                        </p>
-                    </div>
+            <p class="hero-text">
+              Vivre au Maroc!
+            </p>
+          </div>
 
-                    <div class="hero-banner"></div>
+          <div class="hero-banner"></div>
 
-                    <form method="POST">
-                      <div class="input-box">
-                        <i class="uil uil-search"></i>
-                        <input
-                          autocomplete="off" name="searchCategory" 
-                          id="search" type="text" placeholder="Search here..." 
-                        />
-                        <button class="button">Search</button>
-                      </div>
-                    </form>
-                    <div class="search-box" id="show-list">
-                      <!-- Here autocomplete list will be display -->
-                    </div>
-                </div>
-            </section>
+          <form method="POST">
+            <div class="input-box">
+              <i class="uil uil-search"></i>
+              <input autocomplete="off" name="searchCategory" id="search" type="text" placeholder="Search here..." />
+              <button class="button">Search</button>
+            </div>
+          </form>
+          <div class="search-box" id="show-list">
+            <!-- Here autocomplete list will be display -->
+          </div>
+        </div>
+      </section>
 
       <!-- 
         - #FEATURED CAR MACHINES
       -->
+      <ul class="notifications">
+        <?php include('layout/alert.php'); ?>
+      </ul>
 
       <section class="section featured-car" id="featured-car">
-      
+
         <div class="container">
 
-        <div class="alert-message">
-          <?php include('layout/alert.php'); ?>
-        </div>
           <div class="title-wrapper">
             <h2 class="h2 section-title">Featured cars</h2>
 
@@ -86,18 +94,17 @@ include 'layout/header.php';
             </a>
           </div>
 
-          <form id='form_categories' action="<?php echo BASE_URL;?>machine_list" method="post">
+          <form id='form_categories' action="<?php echo BASE_URL; ?>machine_list" method="post">
             <input type="hidden" name="category_id" id="category_id">
           </form>
 
           <ul class="featured-car-list">
-            <?php for($i = 0; $i < count($category->t); $i++) { ?>
+            <?php for ($i = 0; $i < count($category->t); $i++) { ?>
               <li onclick="getAllMachine(<?= $category->t[$i]->getId() ?>)" class="car-category">
                 <div class="featured-car-card">
 
                   <figure class="card-banner">
-                    <img src="public/images/category/<?= $category->t[$i]->getImage() ?>" alt="Toyota RAV4 2021" loading="lazy" width="440" height="300"
-                      class="w-img-100 image-card">
+                    <img src="public/images/category/<?= $category->t[$i]->getImage() ?>" alt="Toyota RAV4 2021" loading="lazy" width="440" height="300" class="w-img-100 image-card">
                   </figure>
 
                   <div class="card-content">
@@ -124,7 +131,7 @@ include 'layout/header.php';
         - #GET START
       -->
 
-      <section class="section get-start">
+      <!-- <section class="section get-start">
 
         <div class="container">
 
@@ -202,11 +209,60 @@ include 'layout/header.php';
           </ul>
 
         </div>
+      </section> -->
+
+      <?php if (isset($_SESSION['id_user'])) : ?>
+        <section class="section ">
+          <div class="container">
+
+            <div class="wrapper-feedback">
+              <h3>Écrivez vos commentaires.</h3>
+              <form id="feedback_form" method="POST">
+                <div class="rating">
+                  <input name="rating" type="hidden" id="rating">
+                  <i class='bx bx-star star' style="--i: 0;"></i>
+                  <i class='bx bx-star star' style="--i: 1;"></i>
+                  <i class='bx bx-star star' style="--i: 2;"></i>
+                  <i class='bx bx-star star' style="--i: 3;"></i>
+                  <i class='bx bx-star star' style="--i: 4;"></i>
+                </div>
+                <textarea name="description" id="description" cols="100" rows="5" placeholder="Écrivez vos commentaires..."><?php echo $description ?? '' ?></textarea>
+                <div class="btn-group">
+                  <button type="submit" name="add-feedback" class="btn submit">Submit</button>
+                  <button class="btn cancel">Cancel</button>
+                </div>
+              </form>
+            </div>
+
+          </div>
+        </section>
+      <?php endif; ?>
+
+      <section class="section">
+        <!-- Start Testimonials -->
+        <div class="testimonials" id="testimonials">
+          <h2 class="main-title"> Feedback Client </h2>
+          <div class="container">
+          
+            <?php foreach($feedbackList as $feedback): ?>
+              <div class="box">
+                <img src="public/images/users/<?= $feedback->user_photo ?>" alt="" />
+                <h3><?= $feedback->nom ." " . $feedback->prenom ?></h3>
+                <span class="title"><?php echo date('d F Y', strtotime($feedback->date_feedback)) ?></span>
+                <div class="rate">
+                  <?php for($i=0; $i < $feedback->rating; $i++ ): ?>
+                    <i class="filled fas fa-star"></i>
+                  <?php endfor; ?>
+                </div>
+                <p>
+                  <?= $feedback->description ?>
+                </p>
+              </div>
+            <?php endforeach; ?>
+          </div>
+        </div>
+        <!-- End Testimonials -->
       </section>
-
-
-
-
 
       <!-- 
         - #BLOG
@@ -225,8 +281,7 @@ include 'layout/header.php';
                 <figure class="card-banner">
 
                   <a href="#">
-                    <img src="public/images/website/blog-1.jpg" alt="Opening of new offices of the company" loading="lazy"
-                      class="w-img-100">
+                    <img src="public/images/users/user_default.jpg" alt="" />
                   </a>
 
                   <a href="#" class="btn card-badge">Company</a>
@@ -266,8 +321,7 @@ include 'layout/header.php';
                 <figure class="card-banner">
 
                   <a href="#">
-                    <img src="public/images/website/blog-2.jpg" alt="What cars are most vulnerable" loading="lazy"
-                      class="w-img-100">
+                    <img src="public/images/website/blog-2.jpg" alt="What cars are most vulnerable" loading="lazy" class="w-img-100">
                   </a>
 
                   <a href="#" class="btn card-badge">Repair</a>
@@ -307,8 +361,7 @@ include 'layout/header.php';
                 <figure class="card-banner">
 
                   <a href="#">
-                    <img src="public/images/website/blog-3.jpg" alt="Statistics showed which average age" loading="lazy"
-                      class="w-img-100">
+                    <img src="public/images/website/blog-3.jpg" alt="Statistics showed which average age" loading="lazy" class="w-img-100">
                   </a>
 
                   <a href="#" class="btn card-badge">Cars</a>
@@ -348,8 +401,7 @@ include 'layout/header.php';
                 <figure class="card-banner">
 
                   <a href="#">
-                    <img src="public/images/website/blog-4.jpg" alt="What´s required when renting a car?" loading="lazy"
-                      class="w-img-100">
+                    <img src="public/images/website/blog-4.jpg" alt="What´s required when renting a car?" loading="lazy" class="w-img-100">
                   </a>
 
                   <a href="#" class="btn card-badge">Cars</a>
@@ -389,8 +441,7 @@ include 'layout/header.php';
                 <figure class="card-banner">
 
                   <a href="#">
-                    <img src="public/images/website/blog-5.jpg" alt="New rules for handling our cars" loading="lazy"
-                      class="w-img-100">
+                    <img src="public/images/website/blog-5.jpg" alt="New rules for handling our cars" loading="lazy" class="w-img-100">
                   </a>
 
                   <a href="#" class="btn card-badge">Company</a>
@@ -439,9 +490,10 @@ include 'layout/header.php';
   <!-- 
     - #FOOTER
   -->
-  <?php 
-include 'layout/footer.php';
-?>
+  <?php
+  include 'layout/footer.php';
+  ?>
+
 </body>
 
 </html>

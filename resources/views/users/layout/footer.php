@@ -1,10 +1,10 @@
- <!-- 
+ <!--
     - #FOOTER
   -->
-  <div class="div-loader">
-<span class="loader"></span>
+ <div class="div-loader">
+     <span class="loader"></span>
 
-  </div>
+ </div>
  <footer class="footer">
      <div class="container">
          <div class="footer-top">
@@ -105,56 +105,64 @@
 
          <div class="footer-bottom">
              <ul class="social-list">
+                <?php if( !!$web->facebook_link ): ?>
                  <li>
-                     <a href="#" class="social-link">
+                     <a href="<?= $web->facebook_link ?>" class="social-link">
                          <ion-icon name="logo-facebook"></ion-icon>
                      </a>
                  </li>
+                <?php endif; ?>
 
+                <?php if( !!$web->instagram_link ): ?>
                  <li>
-                     <a href="#" class="social-link">
+                     <a href="<?= $web->instagram_link ?>" class="social-link">
                          <ion-icon name="logo-instagram"></ion-icon>
                      </a>
                  </li>
+                 <?php endif; ?>
 
+                 <?php if( !!$web->facebook_link ): ?>
                  <li>
-                     <a href="#" class="social-link">
+                     <a href="<?= $web->facebook_link ?>" class="social-link">
                          <ion-icon name="logo-twitter"></ion-icon>
                      </a>
                  </li>
+                 <?php endif; ?>
 
+                <!--
                  <li>
                      <a href="#" class="social-link">
                          <ion-icon name="logo-linkedin"></ion-icon>
                      </a>
-                 </li>
+                 </li> -->
 
-                 <li>
+                 <!-- <li>
                      <a href="#" class="social-link">
                          <ion-icon name="logo-skype"></ion-icon>
                      </a>
-                 </li>
-
+                 </li> -->
+                 <?php if( !!$web->adresse1 ): ?>
                  <li>
-                     <a href="#" class="social-link">
+                     <a href="mailto: <?= $web->adresse1 ?>" class="social-link">
                          <ion-icon name="mail-outline"></ion-icon>
                      </a>
                  </li>
+                 <?php endif; ?>
              </ul>
 
              <p class="copyright">
-                 &copy; 2022 <a href="#">codewithsadee</a>. All Rights Reserved
+                 &copy; 2022-<?php echo date("Y"); ?> <a href="#"><?= $web->nom_website ?></a>.
              </p>
          </div>
      </div>
  </footer>
 
- <!-- 
+ <!--
     - custom js link
   -->
  <script src="public/js/script.js"></script>
 
- <!-- 
+ <!--
     - ionicon link
   -->
  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
@@ -227,7 +235,7 @@
      }
 
 
-     // password hide 
+     // password hide
      // Hide and show password
      const eyeIcons = document.querySelectorAll(".show-hide");
 
@@ -244,8 +252,8 @@
      });
  </script>
  <!--
-    - custom js link
-  -->
+- custom js link
+-->
 
  <script>
      // -------- Image Machine -----------
@@ -270,9 +278,68 @@
      window.addEventListener('resize', slideImage);
  </script>
  <!--
-    - ionicon link
-  -->
+- ionicon link
+-->
  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
  <script src="public/js/scriptcart.js"></script>
  <script src="public/js/loader.js?v=<?php echo time(); ?>"></script>
+ <script src="public/js/feedback.js?v=<?php echo time(); ?>"></script>
+
+ <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+ <script>
+     $(document).ready(function() {
+         var progressPath = document.querySelector('.t-progress-wrap path');
+         var pathLength = progressPath.getTotalLength();
+
+         progressPath.style.transition = progressPath.style.WebkitTransition = 'none';
+         progressPath.style.strokeDasharray = pathLength + ' ' + pathLength;
+         progressPath.style.strokeDashoffset = pathLength;
+         progressPath.getBoundingClientRect();
+         progressPath.style.transition = progressPath.style.WebkitTransition = 'stroke-dashoffset 10ms linear';
+
+         var updateProgress = function() {
+             var scroll = $(window).scrollTop();
+             var height = $(document).height() - $(window).height();
+             var progress = pathLength - (scroll * pathLength / height);
+             progressPath.style.strokeDashoffset = progress;
+         }
+
+         updateProgress();
+         $(window).scroll(updateProgress);
+
+         var offset = 50;
+         var duration = 550;
+
+         jQuery(window).on('scroll', function() {
+             if (jQuery(this).scrollTop() > offset) {
+                 jQuery('.t-progress-wrap').addClass('active-progress');
+             } else {
+                 jQuery('.t-progress-wrap').removeClass('active-progress');
+             }
+         });
+
+         jQuery('.t-progress-wrap').on('click', function(event) {
+             event.preventDefault();
+             jQuery('html, body').animate({
+                 scrollTop: 0
+             }, duration);
+             return false;
+         })
+     });
+ </script>
+ <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></script> -->
+<?php if($web->tel1): ?>
+ <div id="d-whatsapp">
+     <a href="https:/wa.me/<?= $web->tel1 ?? "" ?>" target="_blank" id="toggle1" class="wtsapp">
+         <!-- <i class="fa fa-whatsapp"></i> -->
+         <i class="fa-brands fa-whatsapp"></i>
+     </a>
+ </div>
+ <?php endif; ?>
+ <div class="t-progress-wrap">
+     <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+         <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+     </svg>
+ </div>
+

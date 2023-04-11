@@ -81,7 +81,7 @@ include 'layout/header.php';
                             <div class="form-group">
                                 <select class="form-control " name="search_entreprise">
                                     <option value="all">Is entreprise ou non</option>
-                                    <option 
+                                    <option
                                         <?= $search_entreprise == "1" ? "selected" : ""  ?>
                                         value="1">
                                         Oui
@@ -133,7 +133,11 @@ include 'layout/header.php';
                                                 <th>Is Entreprise</th>
                                                 <th>Nom entreprise</th>
                                                 <th>Email entreprise</th>
-                                                <th class="text-end">Action</th>
+                                                <?php if(isset($_SESSION["admin"])){ ?>
+                                                    <th class="text-end">Action</th>
+                                                <?php }elseif(!!$roles->delete_user && isset($_SESSION["manager"])){ ?>
+                                                    <th class="text-end">Action</th>
+                                                <?php } ?>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -153,7 +157,7 @@ include 'layout/header.php';
                                                             <!-- <a href="teacher-details.html">Aaliyah</a> -->
                                                         </h2>
                                                     </td>
-                                                
+
                                                     <td><?= $useres->t[$i]->getNom() ?></td>
                                                     <td><?= $useres->t[$i]->getPrenom() ?></td>
                                                     <td><?= $useres->t[$i]->getEmail() ?></td>
@@ -161,7 +165,7 @@ include 'layout/header.php';
 
                                                     <?php if( $useres->t[$i]->getIsEntreprise() === 0) { ?>
                                                         <td>
-                                                            <span class="badge badge-danger">non</span>    
+                                                            <span class="badge badge-danger">non</span>
                                                         </td>
                                                         <td>
                                                             <span class="badge badge-outline-danger">null</span>
@@ -171,29 +175,40 @@ include 'layout/header.php';
                                                         </td>
                                                     <?php } else { ?>
                                                         <td>
-                                                            <span class="badge badge-success">oui</span>    
+                                                            <span class="badge badge-success">oui</span>
                                                         </td>
                                                         <td><?= $useres->t[$i]->getNomEntreprise() ?></td>
                                                         <td><?= $useres->t[$i]->getEmailEntreprise() ?></td>
                                                     <?php } ?>
 
-                                                    <td class="text-end">
-                                                        <div class="actions ">
-                                
-                                                            <!-- model  Delete-->
-                                                            <a type="button" onclick="deleteUser(<?= $useres->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light" data-bs-toggle="modal" data-bs-target="#model-delete">
-                                                                <i class="fa-solid fa-trash-can"></i>
-                                                            </a>
+                                                    <?php if(isset($_SESSION["admin"])){ ?>
+                                                        <td class="text-end">
+                                                            <div class="actions ">
+                                                                <!-- model  Delete-->
+                                                                <a type="button" onclick="deleteUser(<?= $useres->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light" data-bs-toggle="modal" data-bs-target="#model-delete">
+                                                                    <i class="fa-solid fa-trash-can"></i>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    <?php }elseif(!!$roles->delete_user && isset($_SESSION["manager"])){ ?>
+                                                        <td class="text-end">
+                                                            <div class="actions ">
+                                                                <!-- model  Delete-->
+                                                                <a type="button" onclick="deleteUser(<?= $useres->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light" data-bs-toggle="modal" data-bs-target="#model-delete">
+                                                                    <i class="fa-solid fa-trash-can"></i>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    <?php } ?>
 
-                                                        </div>
-                                                    </td>
+
                                                 </tr>
                                             <?php
                                             }
                                             ?>
                                         </tbody>
                                     </table>
-                                    
+
                                 </div>
                             </div>
                         </div>

@@ -66,8 +66,8 @@ class OrderController
 
         // create the html message
         // WEB SITE INFO
-        $web = new UserController($_POST);
-        $infoWeb = $web->getInfoWebSite();
+        $web = new WebSiteController($_POST);
+        $infoWeb = $web->getInfoWebSiteAssoc();
         // USER INFO
         $nom_user = $_SESSION['nom_user'];
         // CREATE THE SWAP VARIABLES ARRAY

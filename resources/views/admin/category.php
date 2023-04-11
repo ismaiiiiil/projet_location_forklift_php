@@ -35,7 +35,7 @@ include 'layout/header.php';
 
     <div class="main-wrapper">
 
-        <?= 
+        <?=
             include('layout/navbar.php') ;
             include 'layout/sidebar.php';
         ?>
@@ -95,7 +95,12 @@ include 'layout/header.php';
                                             <h3 class="page-title">Categories</h3>
                                         </div>
                                         <div class="col-auto text-end float-end ms-auto download-grp">
-                                            <a href="<?php echo BASE_URL ?>add-category" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+
+                                            <?php if(isset($_SESSION["admin"])){ ?>
+                                                <a href="<?php echo BASE_URL ?>add-category" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                            <?php }elseif(!!$roles->add_category && isset($_SESSION["manager"])){ ?>
+                                                <a href="<?php echo BASE_URL ?>add-category" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                 </div>
@@ -107,7 +112,11 @@ include 'layout/header.php';
                                                 <th>ID</th>
                                                 <th>Image</th>
                                                 <th>Nom</th>
-                                                <th class="text-end">Action</th>
+                                                <?php if(isset($_SESSION["admin"])){ ?>
+                                                    <th class="text-end">Action</th>
+                                                <?php }elseif(!!$roles->edit_category || !!$roles->delete_category && isset($_SESSION["manager"])){ ?>
+                                                    <th class="text-end">Action</th>
+                                                <?php } ?>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -124,31 +133,52 @@ include 'layout/header.php';
                                                     </td>
 
                                                     <td><?= $categories->t[$i]->getNom() ?></td>
-                
-                                                    <td class="text-end">
-                                                        <div class="actions ">
+
+                                                    <?php if(isset($_SESSION["admin"])){ ?>
+                                                        <td class="text-end">
+                                                            <div class="actions ">
                                                             <!-- edit -->
-                                                            <a onclick="editCategory(<?= $categories->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light me-2">
-                                                                <i class="feather-edit"></i>
-                                                            </a>
-                                                            <form id='form_edit' action="<?php echo BASE_URL ?>edit-category" method="POST">
-                                                                <input type="hidden" name="id_edit" id="id_edit">
-                                                            </form>
+                                                                <a onclick="editCategory(<?= $categories->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light me-2">
+                                                                    <i class="feather-edit"></i>
+                                                                </a>
+                                                                <form id='form_edit' action="<?php echo BASE_URL ?>edit-category" method="POST">
+                                                                    <input type="hidden" name="id_edit" id="id_edit">
+                                                                </form>
 
-                                                            <!-- model  Delete-->
-                                                            <a type="button" onclick="deleteCategory(<?= $categories->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light" data-bs-toggle="modal" data-bs-target="#model-delete">
-                                                                <i class="fa-solid fa-trash-can"></i>
-                                                            </a>
+                                                                <a type="button" onclick="deleteCategory(<?= $categories->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light" data-bs-toggle="modal" data-bs-target="#model-delete">
+                                                                    <i class="fa-solid fa-trash-can"></i>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    <?php }elseif(!!$roles->edit_category || !!$roles->delete_category && isset($_SESSION["manager"]) ){ ?>
+                                                        <td class="text-end">
+                                                            <div class="actions ">
+                                                                <?php if(!!$roles->edit_category){ ?>
+                                                                    <a onclick="editCategory(<?= $categories->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light me-2">
+                                                                        <i class="feather-edit"></i>
+                                                                    </a>
+                                                                    <form id='form_edit' action="<?php echo BASE_URL ?>edit-category" method="POST">
+                                                                        <input type="hidden" name="id_edit" id="id_edit">
+                                                                    </form>
+                                                                <?php } ?>
 
-                                                        </div>
-                                                    </td>
+                                                                <?php if(!!$roles->delete_category ){ ?>
+                                                                    <a type="button" onclick="deleteCategory(<?= $categories->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light" data-bs-toggle="modal" data-bs-target="#model-delete">
+                                                                        <i class="fa-solid fa-trash-can"></i>
+                                                                    </a>
+                                                                <?php } ?>
+                                                            </div>
+                                                        </td>
+                                                    <?php
+                                                    }
+                                                    ?>
                                                 </tr>
                                             <?php
                                             }
                                             ?>
                                         </tbody>
                                     </table>
-                                    
+
                                 </div>
                             </div>
                         </div>

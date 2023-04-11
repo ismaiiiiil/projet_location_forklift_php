@@ -20,9 +20,9 @@ include 'layout/header.php';
     -->
 
     <main class="container-cart">
-        <div class="alert-message">
+        <ul class="notifications" >
             <?php include('layout/alert.php'); ?>
-        </div>  
+        </ul>
         <h1 class="heading">
             <ion-icon name="cart-outline"></ion-icon> Shopping Cart
         </h1>

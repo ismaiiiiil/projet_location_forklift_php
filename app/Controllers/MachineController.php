@@ -416,6 +416,75 @@ class MachineController
         }
     }
 
+    // Machine Filter
+    function getPrixMachinByCategory($id_category)
+    {
+        try {
+            $db = new DB();
+            $sql = "SELECT DISTINCT prix_machines.prix_jour  FROM machines
+                    JOIN prix_machines on prix_machines.id = machines.id_prix
+                    WHERE id_category = ?
+                    ORDER BY prix_machines.prix_jour DESC";
+            $stmt = $db::connection()->prepare($sql);
+            $stmt->execute([$id_category]);
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        }catch(Exception $e) {
+            echo "Error retrieving" . $e->getMessage();
+        }
+    }
+    function getHauteurPlateFormeMachinByCategory($id_category) 
+    {
+        try {
+            $db = new DB();
+            $sql = "SELECT DISTINCT hauteur_plate_forme  FROM machines
+                    WHERE id_category = ?";
+            $stmt = $db::connection()->prepare($sql);
+            $stmt->execute([$id_category]);
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        }catch(Exception $e) {
+            echo "Error retrieving" . $e->getMessage();
+        }
+    }
+    function getCapaciteLevageMachinByCategory($id_category) 
+    {
+        try {
+            $db = new DB();
+            $sql = "SELECT DISTINCT capacité_levage FROM machines
+                    WHERE id_category = ?";
+            $stmt = $db::connection()->prepare($sql);
+            $stmt->execute([$id_category]);
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        }catch(Exception $e) {
+            echo "Error retrieving" . $e->getMessage();
+        }
+    }
+
+    function searchMachineByCategoryPrixHauteurCapaciter($id_category, $prix, $hauteur, $capacité_levage) {
+        try {
+            $id_category = $this->test_input($id_category);$prix = $this->test_input($prix);$hauteur = $this->test_input($hauteur);$capacité_levage = $this->test_input($capacité_levage);
+            $db = new DB();
+            $sql = 'SELECT *, machines.id id_machine FROM machines
+            JOIN image_machines on machines.id_image = image_machines.id
+            JOIN prix_machines on prix_machines.id = machines.id_prix
+                    WHERE id_category =? AND quantity > 0';
+
+            if(!empty($prix)) {
+                $sql .= " AND prix_machines.prix_jour <= '$prix'";
+            }
+            if(!empty($hauteur)) {
+                $sql .= " AND hauteur_plate_forme LIKE '$hauteur'";
+            }
+            if(!empty($capacité_levage)) {
+                $sql .= " AND capacité_levage LIKE '$capacité_levage'";
+            }
+            $result = $db::connection()->prepare($sql);
+            $result->execute([$id_category]);
+            return $result->fetchAll(PDO::FETCH_OBJ);
+        }catch(Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
     // -------------------------------------
     // -- Validation --
     // -------------------------------------

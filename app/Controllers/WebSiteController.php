@@ -8,14 +8,14 @@ use database\DB;
 use PDOException;
 use RuntimeException;
 
-class WebSiteController 
+class WebSiteController
 {
     private $postData;
 
     public $errors = [];
     public $valid = [];
 
-    function __construct($post) 
+    function __construct($post)
     {
         $this->postData = $post;
     }
@@ -28,7 +28,7 @@ class WebSiteController
         return $data;
     }
 
-    function getInfoWebSite() 
+    function getInfoWebSite()
     {
         try {
             $db = new DB();
@@ -38,14 +38,26 @@ class WebSiteController
         } catch (PDOException $e) {
             echo "Error fetching" . $e->getMessage();
         }
-        
+
+    }
+    function getInfoWebSiteAssoc()
+    {
+        try {
+            $db = new DB();
+            $sql = "SELECT * FROM website WHERE id = 1";
+            $res = $db::connection()->query($sql);
+            return current($res->fetchAll(PDO::FETCH_ASSOC));
+        } catch (PDOException $e) {
+            echo "Error fetching" . $e->getMessage();
+        }
+
     }
 
     public function uploadPhoto($imagePoste , $oldImage = null)
     {
         $dir = "./public/images/website"; // dossier fin timchiw
         $time = time(); // heur
-        $name = str_replace(' ', '-', strtolower($imagePoste["name"])); // espace => '-'  , name="image" ->"image" 
+        $name = str_replace(' ', '-', strtolower($imagePoste["name"])); // espace => '-'  , name="image" ->"image"
         $type = $imagePoste["type"]; // png , jpg .. ?
 
         $ext = substr($name, strpos($name, '.')); // mnin i9d3 -> image.jpg -> (.jpg)
@@ -68,7 +80,7 @@ class WebSiteController
         return false;
     }
 
-    function validateAll() 
+    function validateAll()
     {
         $this->validateNomWebSite();
         $this->validateAdresse1();
@@ -81,37 +93,81 @@ class WebSiteController
         $this->validatePays();
         // $this->validateImage('logo');
         // $this->validateImage('favicon');
+        $this->validatePaypalKey();
+        $this->validateLocalisationMap();
     }
 
-    function updateWebsite() 
+    function updateWebsite()
     {
         $nom_website = $this->test_input($this->postData["nom_website"]);$adresse1 = $this->test_input($this->postData["adresse1"]);$adresse2 = $this->test_input($this->postData["adresse2"]);$tel1 = $this->test_input($this->postData["tel1"]);$tel2 = $this->test_input($this->postData["tel2"]);$ville = $this->test_input($this->postData["ville"]);$localisation = $this->test_input($this->postData["localisation"]);$code_postal = $this->test_input($this->postData["code_postal"]);$pays = $this->test_input($this->postData["pays"]);
         $this->validateAll();
+        $localisation_map = $this->test_input($this->postData["localisation_map"]);
+        $paypal_key  = $this->test_input($this->postData["paypal_key"]);
+
+        $keywords_ar  = $this->postData["keywords_ar"];
+        $keywords_fr  = $this->postData["keywords_fr"];
+        $description_ar  = $this->postData["description_ar"];
+        $description_fr  = $this->postData["description_fr"];
+        $scripts  = $this->postData["scripts"];
         if(
             $this->validateNomWebSite() !== false && $this->validateAdresse1() !== false && $this->validateAdresse2() !== false && $this->validateTel1() !== false && $this->validateTel2() !== false && $this->validateVille() !== false && $this->validateLocalisation() !== false && $this->validateCodePostal() !== false && $this->validatePays() !== false
             // && $this->validateImage('logo') !== false && $this->validateImage('favicon') !== false
-        ) 
+            && $this->validatePaypalKey() !== false && $this->validateLocalisationMap() !== false
+        )
         {
             try {
                 $db = new DB();
-                $sql = "UPDATE website 
+                $sql = "UPDATE website
                         SET nom_website = ? ,logo = ? ,favicon = ? ,adresse1 = ? ,
                         adresse2 = ? ,tel1 = ? ,tel2 = ? ,ville = ? ,localisation = ? ,
-                        code_postal = ? ,pays = ?  WHERE id = 1";
+                        code_postal = ? ,pays = ?,
+                        localisation_map = ?, paypal_key =?,
+                        keywords_ar = ?, keywords_fr = ?,
+                        description_ar = ?, description_fr = ?,
+                        scripts = ?
+                        WHERE id = 1";
+
                 $stmt = $db::connection()->prepare($sql);
-                
+
                 $oldFavicon = $this->postData['current_favicon'];
                 $oldLogo = $this->postData['current_logo'];
                 $faviconFile = $this->uploadPhoto($_FILES["favicon"], $oldFavicon);
                 $logoFile = $this->uploadPhoto($_FILES["logo"], $oldLogo);
-                
-                $stmt->execute([$nom_website, $logoFile, $faviconFile, $adresse1, $adresse2, 
-                                $tel1, $tel2, $ville, $localisation, $code_postal, $pays ]);
+
+                $stmt->execute([$nom_website, $logoFile, $faviconFile, $adresse1, $adresse2,
+                                $tel1, $tel2, $ville, $localisation, $code_postal, $pays,
+                                $localisation_map, $paypal_key,
+                                $keywords_ar, $keywords_fr,
+                                $description_ar,$description_fr,$scripts
+                            ]);
+                // echo $stmt;
                 BaseController::set('success', "Setting modifier avec success");
                 BaseController::redirect("settings");
             } catch (Exception $e) {
                 echo "Error: " . $e->getMessage();
             }
+        }
+    }
+
+    function updateMedia() {
+        try {
+            $facebook_link = $this->test_input($this->postData["facebook_link"]);
+            $twitter_link = $this->test_input($this->postData["twitter_link"]);
+            $instagram_link = $this->test_input($this->postData["instagram_link"]);
+
+            $db = new DB();
+            $sql = "UPDATE website
+                    SET facebook_link = ? ,
+                        twitter_link = ? ,
+                        instagram_link = ?
+                    WHERE id = 1";
+            $stmt = $db::connection()->prepare($sql);
+
+            $stmt->execute([$facebook_link, $twitter_link, $instagram_link ]);
+            BaseController::set('success', "media links modifier avec success");
+            BaseController::redirect("social-settings");
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
         }
     }
 
@@ -127,7 +183,7 @@ class WebSiteController
             $subject = 'Un client envoyer un message';
 
             $headers = "From : <$email>";
-            $txt = "you have received an e-mail from : " . $nom 
+            $txt = "you have received an e-mail from : " . $nom
                         .".\n\n". $message;
             if (mail($to, $subject, $txt, $headers)) {
                 BaseController::redirect('contact');
@@ -143,10 +199,38 @@ class WebSiteController
      // ---------------------------
 
     }
-    
+
     // ---------------------------
     // function Validation
     // ---------------------------
+
+    private function validateLocalisationMap()
+    {
+        $val = $this->test_input($this->postData['localisation_map']);
+        if (empty($val)) {
+            $this->addError('localisation_map', 'localisation map cannot be empty');
+            $result = false;
+        } else {
+            $this->addValid('localisation_map', true);
+            $result = true;
+        }
+        return $result;
+    }
+
+    private function validatePaypalKey()
+    {
+        $val = $this->test_input($this->postData['paypal_key']);
+        if (empty($val)) {
+            $this->addError('paypal_key', 'paypal key cannot be empty');
+            $result = false;
+        } else {
+            $this->addValid('paypal_key', true);
+            $result = true;
+        }
+        return $result;
+    }
+
+
 
     private function validateNomWebSite()
     {
@@ -268,11 +352,11 @@ class WebSiteController
     }
 
     function validateImage($nameImg)
-    { 
-        
+    {
+
         $file = $_FILES["$nameImg"];
 
-        // type file 
+        // type file
         $file_extension = explode('.', $file['name']);
         $file_extension = strtolower(end($file_extension));
         $accepted_formate = array('jpeg', 'jpg', 'png');

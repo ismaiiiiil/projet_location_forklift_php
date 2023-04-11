@@ -3,7 +3,7 @@
             <div class="overlay" data-overlay></div>
 
             <a href="<?php echo BASE_URL ?>home" class="logo">
-                <img src="public/images/website/<?= $web->logo ?>?v=<?php echo time(); ?>" width="70" height="70" alt="Engiloc logo" />                
+                <img src="public/images/website/<?= $web->logo ?>?v=<?php echo time(); ?>" width="70" height="70" alt="Engiloc logo" />
             </a>
             <!-- NavBar -->
             <nav class="navbar" data-navbar>
@@ -52,7 +52,7 @@
                         </div>
                     </a>
                 <?php } ?>
-                
+
 
                 <button class="nav-toggle-btn" data-nav-toggle-btn aria-label="Toggle Menu">
                     <span class="one"></span>

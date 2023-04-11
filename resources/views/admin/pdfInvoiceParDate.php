@@ -230,6 +230,9 @@ $html = '
       text-align: right;
       font-weight: 600;
     }
+    .table-res {
+      margin-top: 5rem;
+    }
 
     .actions {
       text-align: center;
@@ -372,7 +375,8 @@ $html = '
     <div class="top">
         <div class="top-left">
           <div style="display: flex;">
-          <img src="../public/images/website/'. $website->logo .'" width="70" height="60" />
+          
+          <img src="https://i.ibb.co/7WVwZtD/logoSite.png" alt="logoSite" border="0"  width="70" height="60" />
           <h1 class="main" style="margin: 3px 25px;">'. $website->nom_website .'</h1>
         </div>
             <span class="code">
@@ -432,16 +436,22 @@ foreach ($orderuser as $order) {
   $i++;
 }
 
-$html .= '
-            </tbody>
-            <tfoot>
-                <tr class="total">
-                    <td class="name" colspan="4">Total</td>
-                    <td colspan="2" class="number">' . $Total . ' Dh</td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
+$html .= '  </tbody>
+          </table>
+          </div>
+          <div class="table-bill table-res">
+          <table class="table-service">
+            <thead> 
+            <tr><td></td>ddd<td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            </thead>
+            <tbody >
+              <tr class="total" >
+                  <td class="name" colspan="5">Total</td>
+                  <td colspan="2" class="number">' . $Total . ' Dh</td>
+              </tr>
+          </tbody>
+          </table>
+          </div>
 
     <div class="note">
         <p>Merci de travailler avec nous!</p>
@@ -459,6 +469,9 @@ $html .= '
 $options = new Options();
 $options->set('defaultFont', 'Courier');
 // $options->set('chroot', realpath(''));
+$options->set('isRemoteEnabled', true);
+
+
 $dompdf = new Dompdf($options);
 
 $dompdf->loadHtml($html);

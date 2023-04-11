@@ -97,7 +97,7 @@ $web = $website->getInfoWebSite();
                                             <span class="checkmark"></span>
                                         </label>
                                     </div>
-                                    <a href="forgot-password.html">Forgot Password?</a>
+                                    <a href="<?= BASE_URL ?>forgot-password-admin">Forgot Password?</a>
                                 </div>
                             </form>
 

@@ -5,7 +5,7 @@ use app\Models\Benefice;
 use database\DB;
 use PDOException;
 
-class BeneficeController 
+class BeneficeController
 {
     public $t = [];
     private $cpt = 0;
@@ -21,6 +21,24 @@ class BeneficeController
                 $this->t[$this->cpt] = $benefice;
                 $this->cpt++;
             }
+        } catch (PDOException $e) {
+            echo "Exception: " . $e->getMessage();
+        }
+    }
+    function getAllBeneficeFetch($start_date = null ,$end_date = null)
+    {
+        try {
+            $db = new DB();
+            if(!!$start_date && !!$end_date) {
+
+                $sql = "SELECT * FROM bénéfices where date_bénéfices BETWEEN ? AND ? ORDER BY date_bénéfices DESC";
+                $stmt = $db->connection()->prepare($sql);
+                $stmt->execute([$start_date, $end_date]);
+            }else{
+                $sql = "SELECT * FROM bénéfices ORDER BY date_bénéfices DESC";
+                $stmt = $db::connection()->query($sql);
+            }
+            return $stmt->fetchAll();
         } catch (PDOException $e) {
             echo "Exception: " . $e->getMessage();
         }

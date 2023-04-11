@@ -114,12 +114,12 @@ a,
 img,
 span,
 label,
-input,
+input,select , option
 button,
 ion-icon { display: block; }
 
 button,
-input {
+input,select, option {
   background: none;
   border: none;
   font: inherit;
@@ -127,7 +127,7 @@ input {
 
 button { cursor: pointer; }
 
-input { width: 100%; }
+input , option,select{ width: 100%; }
 
 ion-icon { pointer-events: none; }
 
@@ -390,17 +390,31 @@ button, a { transition: var(--transition); }
 
 .input-field {
   color: var(--space-cadet);
-  outline: 2px solid transparent;
-  outline-offset: 5px;
+  /* outline: 2px solid transparent; */
   border-radius: 4px;
-  transition: var(--transition);
+  transition:  0.1s ease;
 }
 
-.input-field:focus { outline-color: var(--orange); }
+.input-field:focus {
+  outline: 1px solid transparent;
+  outline-offset: 5px;
+
+  outline-color: var(--orange); }
 
 .input-field::placeholder { color: var(--independence); }
 
 /* input search */
+select option {
+  position: relative;
+  height: 76px;
+  max-width: 900px;
+  width: 100%;
+  background: #fff;
+  margin: 0 20px;
+  border-radius: 8px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+
+}
 .input-box {
   position: relative;
   height: 76px;
@@ -411,16 +425,7 @@ button, a { transition: var(--transition); }
   border-radius: 8px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
-/* .input-box textarea {
-  position: relative;
-  height: 76px;
-  max-width: 900px;
-  width: 100%;
-  background: #fff;
-  margin: 0 20px;
-  border-radius: 8px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-} */
+
 .input-box i,
 .input-box .button {
   position: absolute;
@@ -463,7 +468,7 @@ button, a { transition: var(--transition); }
     height: 66px;
     margin: 0 8px;
   }
- 
+
   .input-box i {
     left: 12px;
     font-size: 25px;
@@ -477,9 +482,9 @@ button, a { transition: var(--transition); }
     padding: 8px 18px;
   }
 }
- 
+
 /* alert  */
-.alert-message {  
+.alert-message {
   width: 50%;
   margin: 10px auto;
 }
@@ -923,7 +928,7 @@ button, a { transition: var(--transition); }
 
 .footer-top .logo { margin-bottom: 20px; }
 
-.footer .logo img { 
+.footer .logo img {
   border-radius: 50%;
 }
 .footer-text {
@@ -1028,7 +1033,7 @@ button, a { transition: var(--transition); }
     max-width: 540px;
     margin-inline: auto;
   }
-  .alert-message {  
+  .alert-message {
     width: 80%;
   }
 
@@ -1080,7 +1085,7 @@ button, a { transition: var(--transition); }
 
   .container { max-width: 720px; }
 
-  .alert-message {  
+  .alert-message {
     width: 50%;
   }
 
@@ -1212,7 +1217,7 @@ button, a { transition: var(--transition); }
   .container { max-width: 960px; }
 
 
-  .alert-message {  
+  .alert-message {
     width: 50%;
   }
   /**
@@ -1325,7 +1330,7 @@ button, a { transition: var(--transition); }
 
 
   /**
-   * FEATURED CAR 
+   * FEATURED CAR
    */
 
   .featured-car-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -1373,3 +1378,34 @@ button, a { transition: var(--transition); }
 /* contact */
 
 /* ---------- */
+/* .whatsapp_float {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 40px;
+  right: 40px;
+  background-color: #25d366;
+  color: #fff;
+  border-radius: 50px;
+  text-align: center;
+  font-size: 30px;
+  box-shadow: 2px 2px 3px #999;
+  z-index: 100;
+}
+.whatsapp-icon {
+  margin-top: 16px;
+}
+
+for mobile
+@media screen and (max-width: 767px){
+  .whatsapp-icon {
+    margin-top: 10px;
+  }
+  .whatsapp_float {
+    width: 40px;
+    height: 40px;
+    bottom: 20px;
+    right: 10px;
+    font-size: 22px;
+  }
+} */

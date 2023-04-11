@@ -1,0 +1,119 @@
+:root {
+    --yellow: #FFBD13;
+    --blue: #4383FF;
+    --blue-d-1: #3278FF;
+    --light: #F5F5F5;
+    --grey: #AAA;
+    --white: #FFF;
+    /* --shadow: 8px 8px 30px rgba(0, 0, 0, .05); */
+    --shadow :3px 3px 9px hsla(240, 14%, 69%, 0.2);
+}
+
+
+
+
+
+.wrapper-feedback {
+    background: var(--white);
+    padding: 2rem;
+    max-width: 900px;
+    margin: auto;
+    width: 100%;
+    border-radius: .75rem;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.wrapper-feedback h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.wrapper-feedback {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    grid-gap: .5rem;
+    font-size: 2rem;
+    /* margin-left: 15rem;; */
+    color: var(--yellow);
+    margin-bottom: 2rem;
+}
+
+.wrapper-feedback .rating .star {
+    cursor: pointer;
+}
+
+.wrapper-feedback .rating .star.active {
+    opacity: 0;
+    animation: animate .5s calc(var(--i) * .1s) ease-in-out forwards;
+}
+
+@keyframes animate {
+    0% {
+        opacity: 0;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+.wrapper-feedback .rating .star:hover {
+    transform: scale(1.1);
+}
+
+.wrapper-feedback textarea {
+    width: 100%;
+    background: var(--light);
+    padding: 1rem;
+    border-radius: .5rem;
+    border: none;
+    outline: none;
+    resize: none;
+    margin-bottom: .5rem;
+}
+
+.wrapper-feedback .btn-group {
+    display: flex;
+    grid-gap: .5rem;
+    align-items: center;
+}
+
+.wrapper-feedback .btn-group .btn {
+    padding: .75rem 1rem;
+    border-radius: .5rem;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: .875rem;
+    font-weight: 500;
+}
+
+.wrapper-feedback .btn-group .btn.submit {
+    background: var(--blue);
+    color: var(--white);
+}
+
+.wrapper-feedback .btn-group .btn.submit:hover {
+    background: var(--blue-d-1);
+}
+
+.wrapper-feedback .btn-group .btn.cancel {
+    background: var(--white);
+    color: var(--blue);
+}
+
+.wrapper-feedback .btn-group .btn.cancel:hover {
+    background: var(--light);
+}

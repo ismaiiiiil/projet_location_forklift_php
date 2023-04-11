@@ -146,7 +146,11 @@ include 'layout/header.php';
                                                     <th>Delivrer</th>
                                                     <th>Payer</th>
                                                     <th>Machine revenie </th>
-                                                    <th class="text-end">Action</th>
+                                                    <?php if(isset($_SESSION["admin"]) ) { ?>
+                                                        <th class="text-end">Action</th>
+                                                    <?php }elseif(!!$roles->show_order || !!$roles->delete_order || !!$roles->controle_order  && isset($_SESSION["manager"])){ ?>
+                                                        <th class="text-end">Action</th>
+                                                    <?php } ?>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -157,7 +161,7 @@ include 'layout/header.php';
                                                         <td><?= $i + 1 ?></td>
                                                         <td><?= $order->t[$i]->getNomUser() ?></td>
                                                         <td><?= $order->t[$i]->getEmailUser() ?></td>
-                                                        <td><?php 
+                                                        <td><?php
                                                             foreach($machines as $m) :
                                                                 if ( $order->t[$i]->getIdMachine() == $m->id) :
                                                                     echo $m->nom;
@@ -170,55 +174,97 @@ include 'layout/header.php';
                                                         <td><?= $order->t[$i]->getDateOrder() ?></td>
                                                         <td>
                                                             <?php if($order->t[$i]->getDelivrer() === 0 ) { ?>
-                                                                <span class="fs-6 badge badge-danger">non</span>    
+                                                                <span class="fs-6 badge badge-danger">non</span>
                                                             <?php } else { ?>
-                                                                <span class="fs-6 badge badge-success">oui</span>    
+                                                                <span class="fs-6 badge badge-success">oui</span>
                                                             <?php }?>
                                                         </td>
                                                         <td>
                                                             <?php if($order->t[$i]->getPayer() === 0 ) { ?>
-                                                                <span class="fs-6 badge badge-danger">non</span>    
+                                                                <span class="fs-6 badge badge-danger">non</span>
                                                             <?php } else { ?>
-                                                                <span class="fs-6 badge badge-success">oui</span>    
+                                                                <span class="fs-6 badge badge-success">oui</span>
                                                             <?php }?>
                                                         </td>
                                                         <td>
                                                             <?php if($order->t[$i]->getMachineRevenir() === 0 ) { ?>
-                                                                <span class="fs-6 badge badge-danger">non</span>    
+                                                                <span class="fs-6 badge badge-danger">non</span>
                                                             <?php } else { ?>
-                                                                <span class="fs-6 badge badge-success">oui</span>    
+                                                                <span class="fs-6 badge badge-success">oui</span>
                                                             <?php }?>
                                                         </td>
-                                                        <td class="text-end">
-                                                            <div class="actions ">
-                                                                <form action="<?php echo BASE_URL ?>show-order" id="form_show" method="POST">
-                                                                    <input type="hidden" name="id_show" id="id_show">
-                                                                </form>
-                                                                <a href="javascript:;"  onclick="showOrder(<?= $order->t[$i]->getId() ?>);"
-                                                                class="btn btn-sm bg-success-light me-2 ">
-                                                                    <i class="feather-eye"></i>
-                                                                </a>
-                                                                <!-- model  Delete-->
-                                                                <a type="button" onclick="deleteOrder(<?= $order->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light me-2" data-bs-toggle="modal" data-bs-target="#model-delete">
-                                                                    <i class="fa-solid fa-trash-can"></i>
-                                                                </a>
-                                                                <?php if($order->t[$i]->getDelivrer() === 0 ) { ?>
-                                                                    <form id="form_delivred" method="POST">
-                                                                        <input type="hidden" name="id_delivred" id="id_delivred">
+                                                        <?php if(isset($_SESSION["admin"])){ ?>
+                                                            <td class="text-end">
+                                                                <div class="actions ">
+                                                                    <form action="<?php echo BASE_URL ?>show-order" id="form_show" method="POST">
+                                                                        <input type="hidden" name="id_show" id="id_show">
                                                                     </form>
-                                                                    <a onclick="delivredOrder(<?= $order->t[$i]->getId() ?>)" class="btn text-light btn-sm bg-success rounded ">
-                                                                        <i class="fa-solid fa-check"></i>
+                                                                    <a href="javascript:;"  onclick="showOrder(<?= $order->t[$i]->getId() ?>);" class="btn btn-sm bg-success-light me-2 ">
+                                                                        <i class="feather-eye"></i>
                                                                     </a>
-                                                                <?php } else { ?>
-                                                                    <form id="form_not_delivred" method="POST">
-                                                                        <input type="hidden" name="id_not_delivred" id="id_not_delivred">
-                                                                    </form>
-                                                                    <a onclick="notDelivredOrder(<?= $order->t[$i]->getId() ?>)" class="btn text-light btn-sm bg-danger rounded ">
-                                                                        <i class="fa-solid fa-xmark"></i>
+
+                                                                    <a type="button" onclick="deleteOrder(<?= $order->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light me-2" data-bs-toggle="modal" data-bs-target="#model-delete">
+                                                                        <i class="fa-solid fa-trash-can"></i>
                                                                     </a>
-                                                                <?php }  ?>
-                                                            </div>
-                                                        </td>
+
+                                                                    <?php if($order->t[$i]->getDelivrer() === 0 ) { ?>
+                                                                        <form id="form_delivred" method="POST">
+                                                                            <input type="hidden" name="id_delivred" id="id_delivred">
+                                                                        </form>
+                                                                        <a onclick="delivredOrder(<?= $order->t[$i]->getId() ?>)" class="btn text-light btn-sm bg-success rounded ">
+                                                                            <i class="fa-solid fa-check"></i>
+                                                                        </a>
+                                                                    <?php } else { ?>
+                                                                        <form id="form_not_delivred" method="POST">
+                                                                            <input type="hidden" name="id_not_delivred" id="id_not_delivred">
+                                                                        </form>
+                                                                        <a onclick="notDelivredOrder(<?= $order->t[$i]->getId() ?>)" class="btn text-light btn-sm bg-danger rounded ">
+                                                                            <i class="fa-solid fa-xmark"></i>
+                                                                        </a>
+                                                                    <?php }  ?>
+                                                                </div>
+                                                            </td>
+                                                        <?php }elseif(!!$roles->show_order || !!$roles->delete_order || !!$roles->controle_order && isset($_SESSION["manager"])){ ?>
+                                                            <td class="text-end">
+                                                                <div class="actions ">
+
+                                                                    <?php if(!!$roles->show_order ){ ?>
+                                                                        <form action="<?php echo BASE_URL ?>show-order" id="form_show" method="POST">
+                                                                            <input type="hidden" name="id_show" id="id_show">
+                                                                        </form>
+                                                                        <a href="javascript:;"  onclick="showOrder(<?= $order->t[$i]->getId() ?>);"
+                                                                        class="btn btn-sm bg-success-light me-2 ">
+                                                                            <i class="feather-eye"></i>
+                                                                        </a>
+                                                                    <?php } ?>
+
+                                                                    <?php if(!!$roles->delete_order ){ ?>
+                                                                        <a type="button" onclick="deleteOrder(<?= $order->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light me-2" data-bs-toggle="modal" data-bs-target="#model-delete">
+                                                                            <i class="fa-solid fa-trash-can"></i>
+                                                                        </a>
+                                                                    <?php } ?>
+
+                                                                    <?php if(!!$roles->controle_order){ ?>
+                                                                        <?php if($order->t[$i]->getDelivrer() === 0 ) { ?>
+                                                                            <form id="form_delivred" method="POST">
+                                                                                <input type="hidden" name="id_delivred" id="id_delivred">
+                                                                            </form>
+                                                                            <a onclick="delivredOrder(<?= $order->t[$i]->getId() ?>)" class="btn text-light btn-sm bg-success rounded ">
+                                                                                <i class="fa-solid fa-check"></i>
+                                                                            </a>
+                                                                        <?php } else { ?>
+                                                                            <form id="form_not_delivred" method="POST">
+                                                                                <input type="hidden" name="id_not_delivred" id="id_not_delivred">
+                                                                            </form>
+                                                                            <a onclick="notDelivredOrder(<?= $order->t[$i]->getId() ?>)" class="btn text-light btn-sm bg-danger rounded ">
+                                                                                <i class="fa-solid fa-xmark"></i>
+                                                                            </a>
+                                                                        <?php }  ?>
+                                                                    <?php } ?>
+                                                                </div>
+                                                            </td>
+                                                        <?php } ?>
+
                                                     </tr>
                                                 <?php
                                                 }
@@ -296,7 +342,7 @@ include 'layout/header.php';
                 form.submit();
             }
 
-            function showOrder($id) 
+            function showOrder($id)
             {
                 var form = document.getElementById('form_show');
                 var input = document.getElementById('id_show');
@@ -305,7 +351,7 @@ include 'layout/header.php';
             }
 
 
-            function delivredOrder($id) 
+            function delivredOrder($id)
             {
                 var form = document.getElementById('form_delivred');
                 var input = document.getElementById('id_delivred');

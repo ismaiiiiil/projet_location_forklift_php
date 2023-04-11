@@ -28,7 +28,7 @@ if(isset($_POST['current_image']) )
 {
     // var_dump($_POST);
     $user->updatePhotoProfile();
-    
+
 }
 
 
@@ -40,7 +40,7 @@ include 'layout/header.php';
 <body>
 
 
-    <!-- 
+    <!--
     - #HEADER
   -->
 
@@ -57,8 +57,9 @@ include 'layout/header.php';
             <!-- End Head -->
             <h1 class="p-relative">Profile</h1>
             <div class=" m-20">
-            <?php
-            include('layout/alert.php'); ?>
+            <ul class="notifications" >
+                <?php include('layout/alert.php'); ?>
+            </ul>
 
             </div>
 
@@ -123,7 +124,7 @@ include 'layout/header.php';
                         <div class="box p-20 d-flex align-center">
                             <h4 class="c-grey w-full fs-15 m-0">Déconnecter</h4>
 
-                            
+
                             <div class="fs-14">
                                 <label>
                                     <a href="<?php echo BASE_URL ?>logout" class="btn-cart btn-danger button-cart a danger " aria-label="Profile">
@@ -140,7 +141,7 @@ include 'layout/header.php';
                     </div>
                 </div>
                 <!-- Start Settings Box -->
-            
+
                 <!-- End Settings Box -->
                 <!-- End Overview -->
                 <!-- Start Other Data -->
@@ -158,11 +159,28 @@ include 'layout/header.php';
                                     <span class="d-block mb-10">Commande <?= $i + 1 ?></span>
                                     <span class="c-grey">Commande Efectuée le <?= $date->date_order ?></span>
                                     <?php
-                                    $datetime1 = strtotime(date('Y-m-d'));
-                                    $datetime2 = strtotime($date->date_order);
+                                    // $datetime1 = strtotime(date('Y-m-d'));
+                                    // $datetime2 = strtotime($date->date_order);
 
-                                    $secs = $datetime1 - $datetime2; // == <seconds between the two times>
-                                    $days = $secs / 86400;
+                                    // $secs = $datetime1 - $datetime2; // == <seconds between the two times>
+                                    // $days = $secs / 86400;
+
+                                    // -----------------
+                                    $tDeb = explode("-", date('Y-m-d'));
+                                    $tFin = explode("-", $date->date_order);
+
+                                    $diff = mktime(0, 0, 0, $tFin[1], $tFin[2], $tFin[0]) -
+                                            mktime(0, 0, 0, $tDeb[1], $tDeb[2], $tDeb[0]);
+
+
+                                    if(intval($tDeb[1]) >= 7)
+                                    {
+                                        $days =  abs(floor((($diff / 86400)+1)));
+                                    }
+                                    elseif(intval($tDeb[1]) < 7)
+                                    {
+                                        $days = abs(ceil((($diff / 86400)+1)));
+                                    }
                                     ?>
                                     <a onclick="afficheOrder('<?= $date->date_order ?>');" class="btn-cart btn-warning button-cart a">
                                         <i class="fa-solid fa-download"></i> Pour télécharger Votre facture cliquer içi .
@@ -190,22 +208,22 @@ include 'layout/header.php';
                     <!-- <p class="mt-0 mb-20 c-grey fs-15">General Information About Your Account</p> -->
                     <div class="mb-15">
                         <label class="fs-14 c-grey d-block mb-10" for="old_pass">Ancien mot de passe</label>
-                        <input class="b-none border-ccc p-10 rad-6 d-block w-full" 
-                                type="password" name="old_pass" 
+                        <input class="b-none border-ccc p-10 rad-6 d-block w-full"
+                                type="password" name="old_pass"
                                 value="<?= $old_pass ?>"
                                 placeholder="Ancien mot de passe" />
                     </div>
                     <div class="mb-15">
                         <label class="fs-14 c-grey d-block mb-5" for="password">Nouveau mot de passe</label>
-                        <input class="b-none border-ccc p-10 rad-6 d-block w-full" 
-                                id="password" name="password" type="password" 
+                        <input class="b-none border-ccc p-10 rad-6 d-block w-full"
+                                id="password" name="password" type="password"
                                 value="<?= $password ?>"
                                 placeholder="Nouveau mot de passe" />
                     </div>
                     <div class="mb-15">
                         <label class="fs-14 c-grey d-block mb-5" for="cpassword">Confirmez le mot de passe</label>
-                        <input class="email b-none border-ccc p-10 rad-6 w-full mr-10" 
-                                id="cpassword" name="cpassword" type="password" 
+                        <input class="email b-none border-ccc p-10 rad-6 w-full mr-10"
+                                id="cpassword" name="cpassword" type="password"
                                 value="<?= $cpassword ?>"
                                 placeholder="Confirmez le mot de passe"  />
                         <div class="my-2">

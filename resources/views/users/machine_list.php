@@ -1,19 +1,38 @@
 <?php
-// session_start();
 
+use app\Controllers\BaseController;
 use app\Controllers\MachineController;
 
 
-if(!isset($_POST['category_id'])) {
-    header('location:home');
+if (!isset($_POST['category_id'])) {
+    BaseController::redirect('home');
+}
+$id_category = $_POST['category_id'];
+
+
+$machines = new MachineController($_POST);
+
+// if(count($machinesList) < 1) {
+//     BaseController::redirect('home');
+// }
+
+
+$prixMachine = $machines->getPrixMachinByCategory($id_category);
+$hauteurPlateFormMachine = $machines->getHauteurPlateFormeMachinByCategory($id_category);
+$capaciteLevageMachine = $machines->getCapaciteLevageMachinByCategory($id_category);
+
+$prix_jour = "";
+$hauteur_plate_forme = "";
+$capacité_levage = "";
+if(isset($_POST['find'])) {
+    $prix_jour = isset($_POST["prix_jour"]) ? $_POST["prix_jour"] : "";
+    $hauteur_plate_forme = isset($_POST["hauteur_plate_forme"]) ? $_POST["hauteur_plate_forme"] : "";
+    $capacité_levage = isset($_POST["capacité_levage"]) ? $_POST["capacité_levage"] : "";
+    $machinesList = $machines->searchMachineByCategoryPrixHauteurCapaciter($id_category,$prix_jour, $hauteur_plate_forme , $capacité_levage  );
+}else {
+    $machinesList = $machines->getMachineParCategory($id_category);
 }
 
-
-$machines = new MachineController($_POST) ;
-
-$machines = $machines->getMachineParCategory($_POST['category_id']);
-
-    
 include 'layout/header.php';
 
 ?>
@@ -45,29 +64,58 @@ include 'layout/header.php';
                     </div>
 
                     <div class="hero-banner"></div>
-                    <!-- FORM SEARCH -->
-                    <form action="" class="hero-form">
 
+                    <form method="POST" class="hero-form">
+                        <input type="hidden" name="category_id" value="<?= $id_category ?>">
                         <div class="input-wrapper">
-                            <label for="input-1" class="input-label">Car, model, or brand</label>
-
-                            <input type="text" name="car-model" id="input-1" class="input-field" placeholder="What car are you looking?">
+                            <label for="input-1" class="input-label">hauteur de plate forme</label>
+                            <select name="hauteur_plate_forme" id="input-1" class="input-field" >
+                                <option value="" >Filtrer par hauteur de plate forme</option>
+                                <?php foreach($hauteurPlateFormMachine as $h) : ?>
+                                    <option
+                                    <?= $h->hauteur_plate_forme == $hauteur_plate_forme ? "selected" : "" ?>
+                                    value="<?= $h->hauteur_plate_forme ?>">
+                                        <?= $h->hauteur_plate_forme ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
 
                         <div class="input-wrapper">
-                            <label for="input-1" class="input-label">Car, model, or brand</label>
+                            <label for="input-2" class="input-label">capacité de levage</label>
 
-                            <input type="text" name="car-model" id="input-1" class="input-field" placeholder="What car are you looking?">
+                            <select name="capacité_levage" id="input-2" class="input-field">
+                                <option value="" >Filtrer par capacité de levage</option>
+                                <?php foreach($capaciteLevageMachine as $c) : ?>
+                                    <option
+                                    <?= $c->capacité_levage == $capacité_levage ? "selected" : "" ?>
+                                    value="<?= $c->capacité_levage ?>">
+                                        <?= $c->capacité_levage ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
 
                         <div class="input-wrapper">
-                            <label for="input-2" class="input-label">Max. monthly payment</label>
+                            <label for="input-3" class="input-label">prix</label>
 
-                            <input type="text" name="monthly-pay" id="input-2" class="input-field" placeholder="Add an amount in $">
+                            <select name="prix_jour" id="input-3" class="input-field">
+                                <option value="" >Filtrer par prix</option>
+                                <?php foreach($prixMachine as $prix) : ?>
+                                    <option
+                                    <?=  $prix->prix_jour == $prix_jour ? "selected" : "" ?>
+                                    value="<?= $prix->prix_jour ?>">
+                                        <?= $prix->prix_jour ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+
                         </div>
 
-                        
-                        <button type="submit" class="btn">Search</button>
+                        <button type="submit" name="find" class="btn">
+                            <ion-icon name="funnel-outline"></ion-icon>    
+                            Search
+                        </button>
 
                     </form>
 
@@ -75,7 +123,7 @@ include 'layout/header.php';
             </section>
 
             <!-- 
-        - #FEATURED CAR MACHINES
+        - #FEATURED CAR machinesList
     -->
 
             <section class="section featured-car" id="featured-car">
@@ -91,77 +139,76 @@ include 'layout/header.php';
                     </div>
 
                     <ul class="featured-car-list">
-                        <?php 
-                        foreach($machines as $machine) :            
+                        <?php
+                        foreach ($machinesList as $machine) :
                         ?>
-                        <li>
-                            <div class="featured-car-card">
-                                <figure class="card-banner">
-                                    <img src="public/images/machine/<?= $machine->image1 ?>" alt="Toyota RAV4 2021" 
-                                    loading="lazy" width="440" height="300" class="w-img-100" />
-                                </figure>
+                            <li>
+                                <div class="featured-car-card">
+                                    <figure class="card-banner">
+                                        <img src="public/images/machine/<?= $machine->image1 ?>" alt="Toyota RAV4 2021" loading="lazy" width="440" height="300" class="w-img-100" />
+                                    </figure>
 
-                                <div class="card-content">
-                                    <div class="card-title-wrapper">
-                                        <h3 class="h3 card-title">
-                                            <a href="#">
-                                                <?= $machine->nom ?>
-                                            </a>
-                                        </h3>
+                                    <div class="card-content">
+                                        <div class="card-title-wrapper">
+                                            <h3 class="h3 card-title">
+                                                <a href="#">
+                                                    <?= $machine->nom ?>
+                                                </a>
+                                            </h3>
 
-                                        <data class="year" value="2021">2021</data>
-                                    </div>
+                                            <data class="year" value="2021">2021</data>
+                                        </div>
 
-                                    <ul class="card-list">
-                                        <li class="card-list-item">
-                                            <ion-icon name="people-outline"></ion-icon>
+                                        <ul class="card-list">
+                                            <li class="card-list-item">
+                                                <!-- <ion-icon name="people-outline"></ion-icon> -->
+                                                <ion-icon name="logo-steam"></ion-icon>
+                                                <span class="card-item-text">
+                                                    <?= $machine->hauteur_plate_forme ?>
+                                                </span>
+                                            </li>
 
-                                            <span class="card-item-text">
-                                            <?= $machine->hauteur_plate_forme ?>
-                                            </span>
-                                        </li>
+                                            <li class="card-list-item">
+                                                <ion-icon name="flash-outline"></ion-icon>
 
-                                        <li class="card-list-item">
-                                            <ion-icon name="flash-outline"></ion-icon>
+                                                <span class="card-item-text">Hybrid</span>
+                                            </li>
 
-                                            <span class="card-item-text">Hybrid</span>
-                                        </li>
+                                            <li class="card-list-item">
+                                                <!-- <ion-icon name="speedometer-outline"></ion-icon> -->
+                                                <ion-icon name="analytics-outline"></ion-icon>
+                                                <span class="card-item-text">
+                                                    <?= $machine->capacité_levage ?>
+                                                </span>
+                                            </li>
 
-                                        <li class="card-list-item">
-                                            <ion-icon name="speedometer-outline"></ion-icon>
+                                            <li class="card-list-item">
+                                                <!-- <ion-icon name="hardware-chip-outline"></ion-icon> -->
+                                                <ion-icon name="flame-outline"></ion-icon>
+                                                <span class="card-item-text">
+                                                    <?= $machine->type_carburant ?>
+                                                </span>
+                                            </li>
+                                        </ul>
 
-                                            <span class="card-item-text">
-                                            <?= $machine->capacité_levage ?>
-                                            </span>
-                                        </li>
+                                        <div class="card-price-wrapper">
+                                            <p class="card-price"><b><?= $machine->prix_jour ?> Dh</b> / Jour</p>
+                                            <p class="card-price"><b><?= $machine->prix_semaine ?> Dh</b> / Semaine</p>
+                                            <p class="card-price"><b><?= $machine->prix_mois ?> Dh</b> / Mois</p>
 
-                                        <li class="card-list-item">
-                                            <ion-icon name="hardware-chip-outline"></ion-icon>
+                                            <button class="btn fav-btn" aria-label="Add to favourite list">
+                                                <ion-icon name="heart-outline"></ion-icon>
+                                            </button>
 
-                                            <span class="card-item-text">
-                                            <?= $machine->type_carburant ?>
-                                            </span>
-                                        </li>
-                                    </ul>
-
-                                    <div class="card-price-wrapper">
-                                        <p class="card-price"><b><?= $machine->prix_jour ?> Dh</b> / Jour</p>
-                                        <p class="card-price"><b><?= $machine->prix_semaine ?> Dh</b> / Semaine</p>
-                                        <p class="card-price"><b><?= $machine->prix_mois ?> Dh</b> / Mois</p>
-
-                                        <button class="btn fav-btn" aria-label="Add to favourite list">
-                                            <ion-icon name="heart-outline"></ion-icon>
-                                        </button>
-
-                                        <button type="button" class="btn" onclick="getMachineDetail(<?= $machine->id_machine ?>)">Rent now</button>
+                                            <button type="button" class="btn" onclick="getMachineDetail(<?= $machine->id_machine ?>)">Rent now</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </li>
+                            </li>
                         <?php
                         endforeach;
                         ?>
-                        <form id='form_machine' action="<?php echo BASE_URL;?>machine_detail" method="POST">
+                        <form id='form_machine' action="<?php echo BASE_URL; ?>machine_detail" method="POST">
                             <input type="hidden" name="machine_id" id="machine_id">
                         </form>
 

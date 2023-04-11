@@ -1,5 +1,5 @@
 DELIMITER $$
-CREATE TRIGGER on_delelete_machine AFTER DELETE ON machines 
+CREATE OR REPLACE TRIGGER on_delelete_machine AFTER DELETE ON machines 
 FOR EACH ROW 
 BEGIN
     DELETE FROM image_machines WHERE image_machines.id = OLD.id_image;   
@@ -40,7 +40,7 @@ FOR EACH ROW
 BEGIN 
 	IF ( EXISTS(SELECT * FROM bénéfices WHERE date_bénéfices = NEW.date_perte) )THEN
     	UPDATE bénéfices 
-        -- SET total_pert = total_pert + NEW.prix_perte ,
+        SET total_pert = total_pert + NEW.prix_perte ,
         prix_hors_taxe = prix_hors_taxe - NEW.prix_perte 
         WHERE date_bénéfices =  NEW.date_perte ; 
     ELSE
@@ -80,15 +80,13 @@ END$$
 
 
 DELIMITER $$
-CREATE OR REPLACE TRIGGER tr_delete_benefice AFTER DELETE ON pertes_matérielles
+CREATE OR REPLACE TRIGGER tr_delete_benefice AFTER DELETE ON bénéfices
 FOR EACH ROW
 BEGIN 
-	IF ( EXISTS(SELECT * FROM bénéfices WHERE date_bénéfices = OLD.date_perte) )THEN
-    	UPDATE bénéfices 
-        SET total_pert = total_pert - OLD.prix_perte  ,
-        prix_hors_taxe = prix_hors_taxe + OLD.prix_perte 
-        WHERE date_bénéfices =  OLD.date_perte ; 
-    END IF;
+	-- IF ( EXISTS(SELECT * FROM pertes_matérielles WHERE date_perte = OLD.date_bénéfices) )THEN
+    	DELETE FROM pertes_matérielles 
+        WHERE date_perte = OLD.date_bénéfices; 
+    -- END IF;
 END$$
 
 

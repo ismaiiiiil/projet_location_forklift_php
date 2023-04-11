@@ -66,7 +66,7 @@ include 'layout/header.php';
                                 <select class="form-control " name="search_name">
                                     <option disabled selected>Search by Name user...</option>
                                     <option value="all">Select all users </option>
-                            
+
                                 </select>
                             </div>
                         </div>
@@ -91,7 +91,11 @@ include 'layout/header.php';
                                             <h3 class="page-title">Perte Matérielles List</h3>
                                         </div>
                                         <div class="col-auto text-end float-end ms-auto download-grp">
-                                            <a href="<?php echo BASE_URL ?>add-perte_materielle" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                            <?php if(isset($_SESSION["admin"])){ ?>
+                                                <a href="<?php echo BASE_URL ?>add-perte_materielle" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                            <?php }elseif(!!$roles->add_perte_materille && isset($_SESSION["manager"])){ ?>
+                                                <a href="<?php echo BASE_URL ?>add-perte_materielle" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                 </div>
@@ -104,7 +108,11 @@ include 'layout/header.php';
                                                 <th>description de matérielles</th>
                                                 <th>prix perte</th>
                                                 <th>date de perte</th>
-                                                <th class="text-end">Action</th>
+                                                <?php if(isset($_SESSION["admin"])){ ?>
+                                                    <th class="text-end">Action</th>
+                                                <?php }elseif(!!$roles->edit_perte_materille || !!$roles->delete_perte_materille && isset($_SESSION["manager"])){ ?>
+                                                    <th class="text-end">Action</th>
+                                                <?php } ?>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -113,7 +121,7 @@ include 'layout/header.php';
                                             ?>
                                                 <tr>
                                                     <td><?= $i + 1 ?></td>
-                                                
+
                                                     <td><?= $perte->t[$i]->getDescriptionMat() ?></td>
                                                     <td>
                                                         <span class="badge badge-outline-danger py-2 px-3">
@@ -124,33 +132,54 @@ include 'layout/header.php';
                                                     </td>
                                                     <td><?= $perte->t[$i]->getDatePerte() ?></td>
 
+                                                    <?php if(isset($_SESSION["admin"])){ ?>
+                                                        <td class="text-end">
+                                                            <div class="actions ">
+                                                            <!-- edit -->
+                                                                <a onclick="editPertMareriel(<?= $perte->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light me-2">
+                                                                    <i class="feather-edit"></i>
+                                                                </a>
+                                                                <form id='form_edit' action="<?php echo BASE_URL ?>edit-perte_materielle" method="POST">
+                                                                    <input type="hidden" name="id_edit" id="id_edit">
+                                                                </form>
 
-                                                    <td class="text-end">
-                                                        <div class="actions ">
-                                
-                                                        <!-- edit -->
-                                                            <a onclick="editPertMareriel(<?= $perte->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light me-2">
-                                                                <i class="feather-edit"></i>
-                                                            </a>
-                                                            <form id='form_edit' action="<?php echo BASE_URL ?>edit-perte_materielle" method="POST">
-                                                                <input type="hidden" name="id_edit" id="id_edit">
-                                                            </form>
+                                                                <!-- model  Delete-->
+                                                                <a type="button" onclick="deletePerteMateriel(<?= $perte->t[$i]->getId() ?>)"
+                                                                    class="btn btn-sm bg-danger-light" data-bs-toggle="modal" data-bs-target="#model-delete">
+                                                                    <i class="fa-solid fa-trash-can"></i>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    <?php }elseif(!!$roles->edit_perte_materille || !!$roles->delete_perte_materille && isset($_SESSION["manager"])){ ?>
+                                                        <td class="text-end">
+                                                            <div class="actions ">
+                                                                <!-- edit -->
+                                                                <?php if(!!$roles->edit_perte_materille){ ?>
+                                                                    <a onclick="editPertMareriel(<?= $perte->t[$i]->getId() ?>)" class="btn btn-sm bg-danger-light me-2">
+                                                                        <i class="feather-edit"></i>
+                                                                    </a>
+                                                                    <form id='form_edit' action="<?php echo BASE_URL ?>edit-perte_materielle" method="POST">
+                                                                        <input type="hidden" name="id_edit" id="id_edit">
+                                                                    </form>
+                                                                <?php } ?>
+                                                                <?php if(!!$roles->delete_perte_materille){ ?>
+                                                                    <!-- model  Delete-->
+                                                                    <a type="button" onclick="deletePerteMateriel(<?= $perte->t[$i]->getId() ?>)"
+                                                                        class="btn btn-sm bg-danger-light" data-bs-toggle="modal" data-bs-target="#model-delete">
+                                                                        <i class="fa-solid fa-trash-can"></i>
+                                                                    </a>
+                                                                <?php } ?>
+                                                            </div>
+                                                        </td>
+                                                    <?php } ?>
 
-                                                            <!-- model  Delete-->
-                                                            <a type="button" onclick="deletePerteMateriel(<?= $perte->t[$i]->getId() ?>)" 
-                                                                class="btn btn-sm bg-danger-light" data-bs-toggle="modal" data-bs-target="#model-delete">
-                                                                <i class="fa-solid fa-trash-can"></i>
-                                                            </a>
-
-                                                        </div>
-                                                    </td>
                                                 </tr>
                                             <?php
                                             }
                                             ?>
                                         </tbody>
                                     </table>
-                                    
+
                                 </div>
                             </div>
                         </div>

@@ -69,7 +69,7 @@ include 'layout/header.php';
                                     <div class="col-auto profile-image me-3 ms-3">
                                         
                                         <div class="div-img-admin">
-                                            <img src="public/images/admin/<?= $adminInfo->admin_profile ?>" class="main-profile-img" />
+                                            <img src="public/images/<?= isset($_SESSION["admin"]) && $_SESSION["admin"] === true ? 'admin' : 'manager' ?>/<?= $adminInfo->admin_profile ?>" class="main-profile-img" />
                                             <label for="image">
                                                 <i class="fa fa-edit icon-input">
                                                 </i>

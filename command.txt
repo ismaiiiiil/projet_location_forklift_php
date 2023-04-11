@@ -8,6 +8,8 @@ password : 12345
  -------------
 
  --- gerant ----
- password : prenom_nom_year
- 
+ password : nom_prenom_year
+
+__________ Run Projet ________________
+php -S localhost:9000
  

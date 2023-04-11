@@ -61,18 +61,18 @@ class UserController
         }
     }
     
-    function getInfoWebSite() 
-    {
-        try {
-            $db = new DB();
-            $sql = "SELECT * FROM website WHERE id = 1";
-            $res = $db::connection()->query($sql);
-            return current($res->fetchAll(PDO::FETCH_ASSOC));
-        } catch (PDOException $e) {
-            echo "Error fetching" . $e->getMessage();
-        }
+    // function getInfoWebSite() 
+    // {
+    //     try {
+    //         $db = new DB();
+    //         $sql = "SELECT * FROM website WHERE id = 1";
+    //         $res = $db::connection()->query($sql);
+    //         return current($res->fetchAll(PDO::FETCH_ASSOC));
+    //     } catch (PDOException $e) {
+    //         echo "Error fetching" . $e->getMessage();
+    //     }
         
-    }
+    // }
 
     function signup() 
     {
@@ -101,6 +101,7 @@ class UserController
                         $this->validateEmail() !== false && $this->validateTel() !== false &&
                         $this->validatePassword() !== false && $this->validateCPassword() !== false &&
                         $this->validateNomEntreprise() !== false && $this->validateEmailEntreprise() !== false
+                        && $this->checkEmailExists($email) !== false
                     ) {
                         $sql = "INSERT INTO users (id, email, nom, prenom, tel, is_entreprise, nom_entreprise, email_entreprise, password) 
                                 VALUES (NULL, ?, ?, ?, ?, 1, ?, ?, ?);";
@@ -278,7 +279,8 @@ class UserController
 
                     // create the html message
                     // WEB SITE INFO
-                    $infoWeb = $this->getInfoWebSite();
+                    $web = new WebSiteController($this->postData);
+                    $infoWeb = $web->getInfoWebSiteAssoc();
                     // USER INFO
                     $infoUser =$this->getUserByEmail($email);
                     
@@ -394,7 +396,7 @@ class UserController
 
     function updatePhotoProfile() 
     {
-        // try {
+        try {
             $this->validateImage("image");
             if($this->validateImage("image") !== false )
             {
@@ -416,9 +418,9 @@ class UserController
                 BaseController::redirect('profil-user');
                 BaseController::set('error' , 'Image n\'est pas valid');
             }
-        // } catch (PDOException $e) {
-        //     echo "Error uploading" . $e->getMessage();
-        // }
+        } catch (PDOException $e) {
+            echo "Error uploading" . $e->getMessage();
+        }
     }
 
     function login() 
@@ -437,6 +439,7 @@ class UserController
                 if( $user->email === $email  && password_verify( $password, $user->password )) 
                 {
                     session_start();
+                    $_SESSION['id_user'] = $user->id;
                     $_SESSION['nom_user'] = $user->nom;
                     $_SESSION['email_user'] = $user->email;
                     // $_SESSION['email'] = $email;

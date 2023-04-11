@@ -25,9 +25,9 @@ include 'layout/header.php';
         
             <section  class="contacts_form">
                         <!-- contact form -->
-                        <div class="alert-message">
+                        <ul class="notifications" >
           <?php include('layout/alert.php'); ?>
-        </div>
+      </ul>
             <div class="container-contact">
                 <div class="content-contact">
                     <div class="left-side">
